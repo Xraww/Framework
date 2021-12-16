@@ -58,16 +58,7 @@ for k,v in pairs(sConfig.Items) do
     end)
 end
 
-local pickups = {}
-
-RegisterNetEvent("dropItem")
-AddEventHandler("dropItem", function(item, count, coords)
-    local player = GetPlayer(source)
-
-    player:removeInventory(item, count)
-    pickups[#pickups+1] = {item = item, label = ItemList[item].label, count = count, coords = coords, added = false}
-    TriggerClientEvent("SendAllPickups", -1, pickups)
-end)
+pickups = {}
 
 RegisterNetEvent("takePickup")
 AddEventHandler("takePickup", function(id, item, amount, count)

@@ -12,7 +12,7 @@ RegisterCommand("giveitem", function(source, args)
             if targetPlayer ~= nil and count > 0 then
                 local canCarry, amount = targetPlayer:canCarryItem(item, count)
                 if canCarry then
-                    myPlayer:addInventory(item, count)
+                    targetPlayer:addInventory(item, count)
                     myPlayer:notify("success", "Vous avez donné ~b~x1 "..ItemList[item].label.."~s~ à l'id ~r~"..args[1])
                 else
                     myPlayer:notify("error", "Le joueur n'a pas assez de place, ~b~"..amount.."kg~s~ en trop.")

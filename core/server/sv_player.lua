@@ -211,7 +211,6 @@ function Player:removeInventory(item, count)
                 end
 
                 local str = string.format("~r~x%s %s", count, ItemList[item].label)
-                self:notify("item", "Vous avez perdu "..str)
                 self:triggerClient("refreshData:inventory", self.inventory)
             end
         end

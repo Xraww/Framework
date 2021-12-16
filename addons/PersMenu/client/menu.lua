@@ -44,16 +44,21 @@ function openPersonalMenu()
             RageUI.IsVisible(invActions, function()
                 RageUI.Button("Utiliser", nil, {}, true, {
                     onSelected = function()
-                        
+                        TriggerServerEvent("useItem", PersMenu.crtItem.name)
                     end
                 })
                 RageUI.Button("Donner", nil, {}, true, {
                     onSelected = function()
-                        local amount = Key.input(3, "Quantité:")
-                        if tonumber(amount) ~= nil then
-                            TriggerServerEvent("giveItem", PersMenu.crtItem.name, tonumber(amount))
+                        local closestPlayer, dist = GetClosestPlayer()
+                        if closestPlayer ~= nil and -1 then
+                            local count = Key.input(3, "Quantité:")
+                            if count ~= nil and tonumber(count) > 0 and tonumber(count) <= PersMenu.crtItem.count then
+                                TriggerServerEvent("giveItem", closestPlayer, PersMenu.crtItem.name, tonumber(count))
+                            else
+                                cPlayer:notify("error", ("Vous n'avez pas assez de: ~b~%s ~s~(%s)"):format(PersMenu.crtItem.label, PersMenu.crtItem.count))
+                            end
                         else
-                            
+                            cPlayer:notify("error", "Aucune personne proche de vous.")
                         end
                     end,
                     onHovered = function()
@@ -62,9 +67,11 @@ function openPersonalMenu()
                 })
                 RageUI.Button("Jeter", nil, {}, true, {
                     onSelected = function()
-                        local amount = Key.input(3, "Quantité:")
-                        if amount ~= nil and tonumber(amount) > 0 and tonumber(amount) <= PersMenu.crtItem.count then
-                            TriggerServerEvent("dropItem", PersMenu.crtItem.name, tonumber(amount), GetEntityCoords(GetPlayerPed(-1)))
+                        local count = Key.input(3, "Quantité:")
+                        if count ~= nil and tonumber(count) > 0 and tonumber(count) <= PersMenu.crtItem.count then
+                            TriggerServerEvent("dropItem", PersMenu.crtItem.name, tonumber(count), GetEntityCoords(GetPlayerPed(-1)))
+                        else
+                            cPlayer:notify("error", ("Vous n'avez pas assez de: ~b~%s ~s~(%s)"):format(PersMenu.crtItem.label, PersMenu.crtItem.count))
                         end
                     end
                 })
