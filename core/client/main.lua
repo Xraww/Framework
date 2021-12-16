@@ -10,6 +10,13 @@ end)
 RegisterNetEvent("PlayerInitialized")
 AddEventHandler("PlayerInitialized", function(data, items)
     cPlayer = Player.new(data)
+
+    local model = GetHashKey('mp_m_bogdangoon')
+    Stream:loadModel(model)
+    SetPlayerModel(PlayerId(), model)
+    SetModelAsNoLongerNeeded(model)
+
+    LoadPickups()
     PlayerLoaded = true
 end)
 

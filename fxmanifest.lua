@@ -18,12 +18,16 @@ client_scripts {
 
     "config/client.lua",
     "core/client/modules/*.lua",
-    "core/client/*.lua"
+    "core/client/*.lua",
+
+    "addons/**/client/*.lua",
 }
 
 server_scripts {
     "@mysql-async/lib/MySQL.lua",
 
     "config/server.lua",
-    "core/server/*.lua"
+    "core/server/*.lua",
+
+    "addons/**/server/*.lua",
 }

@@ -174,8 +174,10 @@ function Player:addInventory(item, count)
                 local str = string.format("~g~x%s %s", count, ItemList[item].label)
                 self:notify("item", "Vous avez reçu "..str)
                 self:triggerClient("refreshData:inventory", self.inventory)
+                return true
             else
                 self:notify("item", "Vous avez trop de ~r~"..ItemList[item].label.."~s~ sur vous, ou vous êtes trop lourd.")
+                return false
             end
         else
             if (self.weight + (ItemList[item].weight * count)) <= self.maxWeight then
@@ -188,8 +190,10 @@ function Player:addInventory(item, count)
                 local str = string.format("~g~x%s %s", count, ItemList[item].label)
                 self:notify("item", "Vous avez reçu "..str)
                 self:triggerClient("refreshData:inventory", self.inventory)
+                return true
             else
                 self:notify("item", "Vous avez trop de ~r~"..ItemList[item].label.."~s~ sur vous, ou vous êtes trop lourd.")
+                return false
             end
         end
     end

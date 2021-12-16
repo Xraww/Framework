@@ -55,6 +55,13 @@ RegisterCommand("id", function(source, args)
     myPlayer:notify("info", "Vous êtes id: ~b~"..source) 
 end, false)
 
+RegisterCommand("pos", function(source, args)
+    local myPlayer = GetPlayer(source)
+    local c, h = myPlayer:getCoords()
+
+    print(c, h)
+end, false)
+
 RegisterCommand("weight", function(source, args)
     local myPlayer = GetPlayer(source)
     myPlayer:notify("info", "Vous portez: ~b~"..myPlayer.weight.."kg") 

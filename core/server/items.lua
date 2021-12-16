@@ -57,3 +57,38 @@ for k,v in pairs(sConfig.Items) do
         v(source)
     end)
 end
+
+local pickups = {}
+
+RegisterNetEvent("dropItem")
+AddEventHandler("dropItem", function(item, count, coords)
+    local player = GetPlayer(source)
+
+    player:removeInventory(item, count)
+    pickups[#pickups+1] = {item = item, label = ItemList[item].label, count = count, coords = coords, added = false}
+    TriggerClientEvent("SendAllPickups", -1, pickups)
+end)
+
+RegisterNetEvent("takePickup")
+AddEventHandler("takePickup", function(id, item, amount, count)
+    GetPickupIfCan(source, id, item, amount, count)
+end)
+
+function GetPickupIfCan(id, idPickup, item, amount, count)
+    local player = GetPlayer(id)
+    if pickups[idPickup] ~= nil then
+        if pickups[idPickup].count == count then
+            if player:addInventory(item, amount) then
+                if pickups[idPickup].count - amount == 0 then
+                    pickups[idPickup] = nil
+                    TriggerClientEvent("SendAllPickups", -1, pickups, idPickup, true, 0)
+                elseif pickups[idPickup].count - amount > 0 then
+                    pickups[idPickup].count = pickups[idPickup].count - amount
+                    TriggerClientEvent("SendAllPickups", -1, pickups, idPickup, false, pickups[idPickup].count)
+                elseif pickups[idPickup].count - amount < 0 then
+                    return
+                end
+            end
+        end
+    end
+end
