@@ -29,7 +29,7 @@ function openPersonalMenu()
 
             RageUI.IsVisible(mainInv, function()
                 if next(cPlayer.inventory) == nil then
-                    RageUI.Separator("Votre sac est vide.")
+                    RageUI.Separator("Votre sac est ~r~vide")
                 else
                     for _,v in pairs(cPlayer.inventory) do
                         RageUI.Button(v.label, nil, {RightLabel = "[~b~"..v.count.."~s~]"}, true, {

@@ -27,6 +27,8 @@ server_scripts {
     "@mysql-async/lib/MySQL.lua",
 
     "config/server.lua",
+    "core/server/comp/*.lua",
+    "core/server/class/*.lua",
     "core/server/*.lua",
 
     "addons/**/server/*.lua",
