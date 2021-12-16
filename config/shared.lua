@@ -1,0 +1,3 @@
+shConfig = {
+    maxWeight = 40,
+}
