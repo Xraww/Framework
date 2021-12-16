@@ -17,6 +17,7 @@ client_scripts {
     "components/RageUI/menu/windows/*.lua",
 
     "config/client.lua",
+    "core/client/modules/*.lua",
     "core/client/*.lua"
 }
 

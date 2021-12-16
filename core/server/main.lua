@@ -1,3 +1,5 @@
+Zones = {}
+
 RegisterNetEvent("initPlayer")
 AddEventHandler("initPlayer", function(source)
     local src = source
@@ -24,6 +26,16 @@ AddEventHandler("initPlayer", function(source)
             end)
         end
     end)
+end)
+
+RegisterNetEvent("sendActualZone")
+AddEventHandler("sendActualZone", function(source, pos)
+    Zones[source] = pos
+end)
+
+RegisterNetEvent("resetActualZone")
+AddEventHandler("resetActualZone", function(source)
+    Zones[source] = nil
 end)
 
 function Trace(arg)
