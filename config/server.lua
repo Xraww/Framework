@@ -13,3 +13,16 @@ sConfig.Base = {
         black = 0, 
     }, 
 }
+
+sConfig.Items = {
+    ["bread"] = function(source) 
+        local myPlayer = GetPlayer(source)
+        myPlayer:notify("item", "Utilisation de l'item: ~o~Pain")
+        myPlayer:removeInventory("bread", 1)
+    end,
+    ["water"] = function(source) 
+        local myPlayer = GetPlayer(source)
+        myPlayer:notify("item", "Utilisation de l'item: ~b~Eau")
+        myPlayer:removeInventory("water", 1)
+    end,
+}

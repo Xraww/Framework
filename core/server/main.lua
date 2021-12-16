@@ -1,7 +1,7 @@
 Zones = {}
 
 RegisterNetEvent("initPlayer")
-AddEventHandler("initPlayer", function(source)
+AddEventHandler("initPlayer", function()
     local src = source
     local identifier = GetPlayerIdentifiers(src)[1]
 
@@ -9,7 +9,7 @@ AddEventHandler("initPlayer", function(source)
 		['@identifier'] = identifier
 	}, function(alreadyExist)
         if alreadyExist[1] then
-            sPlayer = Player.new(src, identifier, alreadyExist[1])
+            sPlayer = Player.create(src, identifier, alreadyExist[1])
             Trace("Initialisation d'un joueur avec l'id: [^4"..src.."^0].")
         else
             local baseAccounts = json.encode(sConfig.Base.Accounts)
@@ -18,6 +18,7 @@ AddEventHandler("initPlayer", function(source)
             MySQL.Async.execute('INSERT INTO players (identifier, perm, accounts) VALUES (@identifier, @perm, @accounts)', {
                 ['@identifier'] = identifier,
                 ['@perm'] = "user",
+                ['@accounts'] = baseAccounts,
             }, function()
                 local data = {
                     accounts = baseAccounts,
@@ -26,6 +27,12 @@ AddEventHandler("initPlayer", function(source)
             end)
         end
     end)
+end)
+
+AddEventHandler('playerDropped', function(reason)
+    local src = source
+    local player = GetPlayer(src)
+    --player:save()
 end)
 
 RegisterNetEvent("sendActualZone")

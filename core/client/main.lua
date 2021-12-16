@@ -1,6 +1,6 @@
 PlayerLoaded = false
 
-CreateThread( function()
+CreateThread(function()
     while not NetworkIsSessionStarted() do
         Wait(10)
     end
@@ -11,6 +11,14 @@ RegisterNetEvent("PlayerInitialized")
 AddEventHandler("PlayerInitialized", function(data, items)
     cPlayer = Player.new(data)
     PlayerLoaded = true
+end)
+
+RegisterNetEvent("refreshData:account", function(newAccount)
+    cPlayer.account = newAccount
+end)
+
+RegisterNetEvent("refreshData:inventory",  function (newInventory)
+    cPlayer.inventory = newInventory
 end)
 
 RegisterNetEvent("notify")

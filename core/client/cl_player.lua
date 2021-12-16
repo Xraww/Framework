@@ -13,6 +13,11 @@ function Player.new(data)
 		self.accounts = data.accounts
 	end
 
+    self.inventory = nil
+	if data.inventory then
+		self.inventory = data.inventory
+	end
+
 	self.identity = nil
 	if data.identity then
 		self.identity = data.identity
