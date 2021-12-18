@@ -12,7 +12,7 @@ function Player.create(id, identifier, data)
 
     self.id = id
     self.identifier = identifier
-    self.weight = data.weight or 0
+    self.weight = 0
     self.maxWeight = shConfig.maxWeight
 
     if rankExist(data.rank) then
@@ -31,21 +31,22 @@ function Player.create(id, identifier, data)
         local foundItems = {}
         local inventory = json.decode(data.inventory)
 
-        for name,count in pairs(inventory) do
+        for name,v in pairs(inventory) do
             local item = ItemList[name]
 
             if item then
-                foundItems[name] = count
+                foundItems[name] = {count = v.count, pLabel = v.pLabel}
             else
                 Trace(("Item ^1invalide^0 (^4%s^0) détecté dans l'inventaire du joueur: %s"):format(name, self.identifier))
             end
         end
 
-        for name,item in pairs(ItemList) do
-            local count = foundItems[name] or 0
-            if count > 0 then self.weight = self.weight + (item.weight * count) end
+        for name, item in pairs(foundItems) do
+            local count = foundItems[name].count
+            local pLabel = foundItems[name].pLabel
 
-            self.inventory[name] = {name = name, label = item.label, count = count}
+            self.inventory[name] = {name = name, label = ItemList[name].label, pLabel = pLabel, count = count}
+            self.weight = self.weight + (ItemList[name].weight * count)
         end
 	end
 

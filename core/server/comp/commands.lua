@@ -44,6 +44,20 @@ RegisterCommand("clearinv", function(src, args, commandName)
     end
 end, false)
 
+RegisterCommand("saveInventory", function(src, args, commandName)
+    local myPlayer = GetPlayer(src)
+    if myPlayer:isAdmin() then
+        local id = tonumber(args[1])
+        local targetPlayer = GetPlayer(id)
+
+        targetPlayer:saveInventory()
+        myPlayer:notify("success", "Vous avez sauvegardé l'inventaire du joueur: ~r~"..args[1])
+        targetPlayer:notify("info", "Votre inventaire a été sauvegardé.")
+    else
+        Trace(("%s %s a essayé: %s"):format(myPlayer.identity.lastname, myPlayer.identity.firtstname, commandName))
+    end
+end, false)
+
 RegisterCommand("useItem", function(src, args, commandName)
     local myPlayer = GetPlayer(src)
     if myPlayer:isAdmin() then

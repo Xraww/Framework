@@ -4,6 +4,13 @@ AddEventHandler("useItem", function(item)
     myPlayer:useItem(item)
 end)
 
+RegisterNetEvent("renameItem")
+AddEventHandler("renameItem", function(item, newLabel)
+    local player = GetPlayer(source)
+
+    player:renameItem(item, newLabel)
+end)
+
 RegisterNetEvent("giveItem")
 AddEventHandler("giveItem", function(targetId, item, count)
     local myPlayer = GetPlayer(source)

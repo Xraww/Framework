@@ -4,7 +4,7 @@ function Player:getInventory(minimal)
 
         for k,v in pairs(self.inventory) do
             if v.count > 0 then
-                minimalInventory[v.name] = v.count
+                minimalInventory[v.name] = {count = v.count, pLabel = v.pLabel}
             end
         end
         
@@ -63,7 +63,8 @@ function Player:addInventory(item, count)
         else
             if (self.weight + (ItemList[item].weight * count)) <= self.maxWeight then
                 self.inventory[item] = {}
-                self.inventory[item].label = ItemList[item].label
+                self.inventory[item].oLabel = ItemList[item].label
+                self.inventory[item].pLabel = ItemList[item].label
                 self.inventory[item].name = item
                 self.inventory[item].count = count
                 self.weight = self.weight + (ItemList[item].weight * count)
@@ -94,6 +95,15 @@ function Player:removeInventory(item, count)
                 local str = string.format("~r~x%s %s", count, ItemList[item].label)
                 self:triggerClient("refreshData:inventory", self.inventory)
             end
+        end
+    end
+end
+
+function Player:renameItem(item, newLabel)
+    if ItemList[item] then
+        if self.inventory[item] then
+            self.inventory[item].pLabel = newLabel
+            self:triggerClient("refreshData:inventory", self.inventory)
         end
     end
 end

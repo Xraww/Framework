@@ -11,9 +11,13 @@ RegisterNetEvent("PlayerInitialized")
 AddEventHandler("PlayerInitialized", function(data, items)
     cPlayer = Player.new(data)
 
-    local model = GetHashKey('mp_m_bogdangoon')
+    local model = GetHashKey('mp_m_freemode_01')
     Stream:loadModel(model)
-    SetPlayerModel(PlayerId(), model)
+
+    if IsModelInCdimage(model) and IsModelValid(model) then
+        SetPlayerModel(PlayerId(), model)
+        SetPedDefaultComponentVariation(GetPlayerPed(-1))
+    end
     SetModelAsNoLongerNeeded(model)
 
     LoadPickups()
