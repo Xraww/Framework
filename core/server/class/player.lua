@@ -44,6 +44,34 @@ function Player.create(id, identifier, data)
         end
 	end
 
+    self.job = nil
+	if data.job then
+        local newJob = json.decode(data.job)
+		self.job = {
+            name = newJob.name,
+            label = Jobs[newJob.name].label,
+            grade = {
+                id = newJob.grade,
+                name = Jobs[newJob.name].grades[newJob.grade].name,
+                label = Jobs[newJob.name].grades[newJob.grade].label
+            }
+        }
+	end
+    
+	self.faction = nil
+	if data.faction then
+        local newFaction = json.decode(data.faction)
+		self.faction = {
+            name = newFaction.name,
+            label = Factions[newFaction.name].label,
+            grade = {
+                id = newFaction.grade,
+                name = Factions[newFaction.name].grades[newFaction.grade].name,
+                label = Factions[newFaction.name].grades[newFaction.grade].label
+            }
+        }
+	end
+
     self.identity = nil
 	if data.identity then
 		self.identity = json.decode(data.identity)
@@ -51,7 +79,6 @@ function Player.create(id, identifier, data)
 
     if self.identity == nil then
         Trace("The player with the id: "..id.." don't have identity.")
-        -- createPlayerIdentity
     end
 
 	PlayerData[self.id] = self

@@ -13,15 +13,21 @@ AddEventHandler("initPlayer", function()
             Trace("Initialisation d'un joueur avec l'id: [^4"..src.."^0].")
         else
             local baseAccounts = json.encode(sConfig.Base.Accounts)
+            local baseJob = json.encode(sConfig.Base.Job)
+            local baseFaction = json.encode(sConfig.Base.Faction)
 
             Trace("Création d'un joueur avec l'id: [^4"..src.."^0].")
-            MySQL.Async.execute('INSERT INTO players (identifier, perm, accounts) VALUES (@identifier, @perm, @accounts)', {
+            MySQL.Async.execute('INSERT INTO players (identifier, perm, accounts, job, faction) VALUES (@identifier, @perm, @accounts, @job, @faction)', {
                 ['@identifier'] = identifier,
                 ['@perm'] = "user",
                 ['@accounts'] = baseAccounts,
+                ['@job'] = baseJob,
+                ['@faction'] = baseFaction,
             }, function()
                 local data = {
                     accounts = baseAccounts,
+                    job = baseJob,
+                    faction = baseFaction,
                 }
                 sPlayer = Player.create(src, identifier, data)
             end)

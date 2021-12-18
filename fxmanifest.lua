@@ -1,6 +1,10 @@
 fx_version 'cerulean'
 games { 'gta5' }
 
+Author 'Xraww'
+
+repository 'https://github.com/Xraww/Framework/'
+
 shared_scripts {
     "config/shared.lua"
 }
@@ -28,6 +32,7 @@ server_scripts {
 
     "config/server.lua",
     "core/server/comp/*.lua",
+    "core/server/class/player.lua",
     "core/server/class/*.lua",
     "core/server/*.lua",
 

@@ -12,6 +12,14 @@ sConfig.Base = {
         bank = 3500, 
         black = 0, 
     }, 
+    Job = { 
+        name = "none", 
+        grade = 1,
+    }, 
+    Faction = { 
+        name = "none", 
+        grade = 1,
+    },
 }
 
 sConfig.Items = {
