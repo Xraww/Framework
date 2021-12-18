@@ -10,16 +10,16 @@ AddEventHandler("initPlayer", function()
 	}, function(alreadyExist)
         if alreadyExist[1] then
             sPlayer = Player.create(src, identifier, alreadyExist[1])
-            Trace("Initialisation d'un joueur avec l'id: [^4"..src.."^0].")
+            Trace("Initialisation d'un joueur avec l'id: [^4"..src.."^0]")
         else
             local baseAccounts = json.encode(sConfig.Base.Accounts)
             local baseJob = json.encode(sConfig.Base.Job)
             local baseFaction = json.encode(sConfig.Base.Faction)
 
-            Trace("Création d'un joueur avec l'id: [^4"..src.."^0].")
-            MySQL.Async.execute('INSERT INTO players (identifier, perm, accounts, job, faction) VALUES (@identifier, @perm, @accounts, @job, @faction)', {
+            Trace("Création d'un joueur avec l'id: [^4"..src.."^0]")
+            MySQL.Async.execute('INSERT INTO players (identifier, rank, accounts, job, faction) VALUES (@identifier, @rank, @accounts, @job, @faction)', {
                 ['@identifier'] = identifier,
-                ['@perm'] = "user",
+                ['@rank'] = "user",
                 ['@accounts'] = baseAccounts,
                 ['@job'] = baseJob,
                 ['@faction'] = baseFaction,
@@ -50,6 +50,18 @@ RegisterNetEvent("resetActualZone")
 AddEventHandler("resetActualZone", function(source)
     Zones[source] = nil
 end)
+
+function rankExist(rankName)
+    local bool = false
+    for rank, v in pairs(shConfig.rankList) do
+        if rank == rankName then
+            return true
+        else
+            bool = false
+        end
+    end
+    return false
+end
 
 function Trace(arg)
     print("^6[Xraww]^0 "..arg)

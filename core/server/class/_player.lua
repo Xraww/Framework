@@ -12,9 +12,14 @@ function Player.create(id, identifier, data)
 
     self.id = id
     self.identifier = identifier
-    self.perm = data.perm or "user"
     self.weight = data.weight or 0
     self.maxWeight = shConfig.maxWeight
+
+    if rankExist(data.rank) then
+        self.rank = data.rank
+    else
+        self.rank = "user"
+    end
 
     self.accounts = nil
 	if data.accounts then
@@ -78,7 +83,7 @@ function Player.create(id, identifier, data)
 	end
 
     if self.identity == nil then
-        Trace("The player with the id: "..id.." don't have identity.")
+        Trace("Le joueur possédant l'id: "..id.." n'a pas d'identité")
     end
 
 	PlayerData[self.id] = self
@@ -94,7 +99,7 @@ function Player:notify(type, txt)
 end
 
 function Player:isAdmin()
-    if self.perm ~= "user" and self.perm == "dev" or "admin" or "mod" then 
+    if self.rank ~= "user" then 
         return true 
     else 
         return false
@@ -130,9 +135,9 @@ end
 
 function Player:save()
     local myCoords, myHead = self:getCoords()
-    MySQL.Async.execute('UPDATE players SET perm = @perm, accounts = @accounts, job = @job, faction = @faction, coords = @coords, inventory = @inventory WHERE identifier = @identifier', {
+    MySQL.Async.execute('UPDATE players SET rank = @rank, accounts = @accounts, job = @job, faction = @faction, coords = @coords, inventory = @inventory WHERE identifier = @identifier', {
         ['@identifier'] = self.identifier,
-        ['@perm'] = self.perm,
+        ['@rank'] = self.rank,
         ['@job'] = json.encode(self.job),
         ['@faction'] = json.encode(self.faction),
         ['@accounts'] = json.encode(self.accounts),

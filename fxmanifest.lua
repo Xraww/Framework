@@ -32,7 +32,6 @@ server_scripts {
 
     "config/server.lua",
     "core/server/comp/*.lua",
-    "core/server/class/player.lua",
     "core/server/class/*.lua",
     "core/server/*.lua",
 

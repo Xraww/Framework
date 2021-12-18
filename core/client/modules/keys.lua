@@ -104,7 +104,7 @@ function Key.onPress(key, methode)
 			if methode then
 				methode()
 			else
-				print("No function on pressed keys")
+				Trace("No function on pressed keys")
 			end
 		end
 	end
@@ -117,7 +117,7 @@ function Key.register(key, commandName, commandDesc, handler)
 		end, true)
 		RegisterKeyMapping(commandName, commandDesc, 'keyboard', string.upper(key))
 	else
-		print(commandName.." doesn't have handler")
+		Trace(commandName.." doesn't have handler")
 	end
 end
 
