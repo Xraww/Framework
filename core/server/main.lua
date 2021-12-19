@@ -1,4 +1,4 @@
-Zones = {}
+local Zones = { }
 
 RegisterNetEvent("initPlayer")
 AddEventHandler("initPlayer", function()
@@ -42,12 +42,12 @@ AddEventHandler('playerDropped', function(reason)
 end)
 
 RegisterNetEvent("sendActualZone")
-AddEventHandler("sendActualZone", function(source, pos)
-    Zones[source] = pos
+AddEventHandler("sendActualZone", function(zone)
+    Zones[source] = zone
 end)
 
 RegisterNetEvent("resetActualZone")
-AddEventHandler("resetActualZone", function(source)
+AddEventHandler("resetActualZone", function()
     Zones[source] = nil
 end)
 

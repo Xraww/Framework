@@ -21,14 +21,15 @@ Peds.__index = Peds
     [retval]:stopAnim() -- Stop anim in progress
 ]]
 
-function Peds.create(Hash, Pos, Sync)
+function Peds.create(data)
     local self = {}
     setmetatable(self, Peds)
     
-    Stream:loadModel(Hash)
-    self.id = CreatePed(1, GetHashKey(Hash), Pos.x, Pos.y, Pos.z - 0.98, Pos.w, Sync, false)
-    self.pos = {x = Pos.x, y = Pos.y, z = Pos.z, w = Pos.w}
+    Stream:loadModel(data.hash)
+    self.id = CreatePed(1, GetHashKey(data.hash), data.pos.x, data.pos.y, data.pos.z - 0.98, data.head, data.sync, false)
+    self.pos = {x = data.pos.x, y = data.pos.y, z = data.pos.z, h = data.head}
     self.exist = DoesEntityExist(self.id)
+    self.showDist = data.showDist
     SetPedDefaultComponentVariation(self.id)
 
     return self

@@ -89,6 +89,7 @@ function Player.create(id, identifier, data)
 
 	PlayerData[self.id] = self
 	self:triggerClient("PlayerInitialized", PlayerData[self.id])
+    TriggerEvent("initZones", self.id)
 end
 
 function Player:triggerClient(eventName, ...)
@@ -97,6 +98,14 @@ end
 
 function Player:notify(type, txt)
     self:triggerClient("notify", type, txt)
+end
+
+function Player:missionNotify(type, txt)
+    self:triggerClient("missionNotify", txt)
+end
+
+function Player:helpNotify(type, txt)
+    self:triggerClient("helpNotify", txt)
 end
 
 function Player:isAdmin()
@@ -110,6 +119,14 @@ end
 function Player:getCoords()
     local pos, h = GetEntityCoords(GetPlayerPed(self.id)), GetEntityHeading(GetPlayerPed(self.id))
     return pos, h
+end
+
+function Player:isNear(Pos, Radius)
+    local coords, head = self:getCoords()
+    if #(coords - Pos) <= Radius then
+        return true
+    end 
+    return false
 end
 
 function Player:isNearZone()

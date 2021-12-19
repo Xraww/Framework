@@ -134,3 +134,24 @@ RegisterCommand("unRank", function(src, args, commandName)
         Trace(("%s %s a essayé: %s"):format(myPlayer.identity.lastname, myPlayer.identity.firtstname, commandName))
     end
 end, false)
+
+RegisterCommand("tp", function(src, args, commandName)
+    local myPlayer = GetPlayer(src)
+    
+    if myPlayer:isAdmin() then
+        SetEntityCoords(GetPlayerPed(src), tonumber(args[1]), tonumber(args[2]), tonumber(args[3]))
+    else
+        Trace(("%s %s a essayé: %s"):format(myPlayer.identity.lastname, myPlayer.identity.firtstname, commandName))
+    end
+end, false)
+
+
+RegisterCommand("tpm", function(src, args, commandName)
+    local myPlayer = GetPlayer(src)
+    
+    if myPlayer:isAdmin() then
+        myPlayer:triggerClient("teleportToMarker")
+    else
+        Trace(("%s %s a essayé: %s"):format(myPlayer.identity.lastname, myPlayer.identity.firtstname, commandName))
+    end
+end, false)

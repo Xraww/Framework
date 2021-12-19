@@ -21,7 +21,9 @@ function Zones.create(params)
 end
 
 local ZoneTiming = 500
-CreateThread( function()
+local pedExist = false
+
+CreateThread(function()
     while true do
         Wait(ZoneTiming)
         
@@ -48,12 +50,12 @@ CreateThread( function()
                         TriggerServerEvent("sendActualZone", v)
                     end
                     if not crtMenu then
-                        CreateThread( function()
+                        CreateThread(function()
                             if not v.forJob then
                                 cPlayer:helpNotify(v.inputText)
                                 v.methode()
                             else
-                                if v.forJob == cPlayer.jobName then
+                                if v.forJob == cPlayer.job.name then
                                     cPlayer:helpNotify(v.inputText)
                                     v.methode()
                                 end
@@ -87,6 +89,10 @@ end
 --[[ Zone exemple:
     Client side:
     
+    Quand liste:
+    local Shopz = {}
+    local Pedz = {}
+
     Blips.create({label = "Magasin", sprite = 52, colour = 43, scale = 0.7, pos = vector3(-521.8681, -231.7319, 35.90186)})
     Peds[_] = Peds.create("mp_m_shopkeep_01", vector3(645.3494, 460.3517, 144.6337), false)
     Shopz[_] = Zones.create({

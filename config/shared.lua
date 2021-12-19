@@ -1,5 +1,6 @@
 shConfig = {
     maxWeight = 40,
+    chests_maxWeight = 250,
 
     rankList = {
         ["user"] = {lvl = 1, label = "Utilisateur"},

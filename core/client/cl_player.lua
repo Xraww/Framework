@@ -1,12 +1,13 @@
 Player = {}
 Player.__index = Player
 
-function Player.new(data)
+function Player.create(data)
     local self = {}
 
-    self.ped = PlayerPedId()
+    self.id = data.id
     self.weight = data.weight
     self.maxWeight = shConfig.maxWeight
+    self.rank = data.rank
 
 	self.accounts = nil
 	if data.accounts then
@@ -18,6 +19,9 @@ function Player.new(data)
 		self.inventory = data.inventory
 	end
 
+    self.job = data.job
+    self.faction = data.faction
+
 	self.identity = nil
 	if data.identity then
 		self.identity = data.identity
@@ -27,8 +31,8 @@ function Player.new(data)
 end
 
 function Player:getCoords()
-    local coords = GetEntityCoords(self.ped)
-    local head = GetEntityHeading(self.ped)
+    local coords = GetEntityCoords(PlayerPedId())
+    local head = GetEntityHeading(PlayerPedId())
     return coords, head
 end
 
@@ -38,21 +42,6 @@ end
 
 function Player:getMaxWeight()
     return self.maxWeight
-end
-
-function Player:setCoords(coords, head)
-    SetEntityCoords(self.ped, coords.x, coords.y, coords.z)
-    if head then
-        SetEntityHeading(self.ped, head)
-    end
-end
-
-function Player:freeze(bool)
-    FreezeEntityPosition(self.ped, bool)
-end
-
-function Player:visible(bool)
-    SetEntityVisible(self.ped, bool, 0)
 end
 
 function Player:isNear(Pos, Radius)

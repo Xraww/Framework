@@ -22,7 +22,6 @@ function Markers.create(params)
     self.inversed = params.inversed or false
     self.radius = params.radius or 15.0
 
-
     return setmetatable(self, Markers)
 end
 
