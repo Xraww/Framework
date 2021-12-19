@@ -1,32 +1,43 @@
 Items = {
     canRegisterUsage = false,
 }
-ItemList = {}
 
 CreateThread(function()
     MySQL.Async.fetchAll('SELECT * FROM items', {
     }, function(result)
         for _,v in pairs(result) do
-            if not ItemList[v.itemName] then
-                Items.register(v)
+            if not Items[v.itemName] then
+                Items.add(v)
             end
         end
         Items.canRegisterUsage = true
     end)
 end)
 
-function Items.register(params)
-    if ItemList[params.name] then
+function Items.create(params)
+    MySQL.Async.execute('INSERT INTO items (name, label, type, weight) VALUES (@name, @label, @type, @weight)', {
+        ['@name'] = params.name,
+        ['@label'] = params.label,
+        ['@type'] = params.type,
+        ['@weight'] = params.weight,
+    }, function()
+        Items.add(params)
+        Trace("L'item ^4"..params.label.."^0 a bien été crée et sauvegardé.")
+    end)
+end
+
+function Items.add(params)
+    if Items[params.name] then
         Trace("L'item ^1"..params.name.."^0 existe déjà.")
     else
-        ItemList[params.name] = {
+        Items[params.name] = {
             name = params.name, 
             label = params.label,
             type = params.type,
             weight = params.weight,
             handler = nil,
         }
-        Trace("L'item ^4"..ItemList[params.name].label.."^0 a bien été initialisé.")
+        Trace("L'item ^4"..Items[params.name].label.."^0 a bien été initialisé.")
     end
 end
 
@@ -35,8 +46,8 @@ function Items.registerUsage(item, handler)
         while Items.canRegisterUsage == false do
             Wait(50)
         end
-        if ItemList[item] and handler then
-            ItemList[item].handler = handler
+        if Items[item] and handler then
+            Items[item].handler = handler
         else
             Trace("L'item ^1"..item.."^0 n'existe pas ou ne possède pas d'usage.")
         end
@@ -45,10 +56,18 @@ end
 
 function Items.use(source, item)
     local src = source
-    if ItemList[item] and ItemList[item].handler then
-        ItemList[item].handler(src)
+    if Items[item] and Items[item].handler then
+        Items[item].handler(src)
     else
         Trace("L'item ^1"..item.."^0 n'existe pas ou ne possède pas d'usage.")
+    end
+end
+
+function Items.haveUsage(item)
+    if Items[item].handler ~= nil then
+        return true
+    else
+        return false
     end
 end
 

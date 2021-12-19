@@ -16,12 +16,12 @@ AddEventHandler("giveItem", function(targetId, item, count)
     local myPlayer = GetPlayer(source)
     local targetPlayer = GetPlayer(targetId)
 
-    if ItemList[item] then
+    if Items[item] then
         local canCarry, amount = targetPlayer:canCarryItem(item, count)
         if canCarry then
             targetPlayer:addInventory(item, count)
             myPlayer:removeInventory(item, count)
-            myPlayer:notify("success", "Vous avez donné ~b~x1 "..ItemList[item].label)
+            myPlayer:notify("success", "Vous avez donné ~b~x1 "..Items[item].label)
         else
             myPlayer:notify("error", "Le joueur n'a pas assez de place.")
         end
@@ -35,6 +35,18 @@ AddEventHandler("dropItem", function(item, count, coords)
     local player = GetPlayer(source)
 
     player:removeInventory(item, count)
-    pickups[#pickups+1] = {item = item, label = ItemList[item].label, count = count, coords = coords, added = false}
+    pickups[#pickups+1] = {item = item, label = Items[item].label, count = count, coords = coords, added = false}
     TriggerClientEvent("SendAllPickups", -1, pickups)
+end)
+
+RegisterNetEvent("itemInfos")
+AddEventHandler("itemInfos", function(item)
+    local player = GetPlayer(source)
+    local haveUsage = "non"
+
+    if Items.haveUsage(item) == true then
+        haveUsage = "oui"
+    end
+
+    player:notify("info", ("Item: ~g~%s - %s\n~s~Poid: ~g~%skg\n~s~Utilisable: ~g~%s\n~s~Type: ~g~%s"):format(Items[item].name, Items[item].label, Items[item].weight, haveUsage, Items[item].type))
 end)

@@ -15,7 +15,7 @@ function Player:getInventory(minimal)
 end
 
 function Player:canUseItem(item)
-    if ItemList[item].handler then
+    if Items[item].handler then
         return true
     end
 end
@@ -29,9 +29,9 @@ function Player:useItem(item)
 end
 
 function Player:canCarryItem(item, count)
-    if ItemList[item] then
+    if Items[item] then
         if self.weight <= self.maxWeight then
-            local calc = (self.weight + (ItemList[item].weight * count))
+            local calc = (self.weight + (Items[item].weight * count))
             if calc <= self.maxWeight then
                 return true, calc
             else
@@ -46,35 +46,35 @@ function Player:canCarryItem(item, count)
 end
 
 function Player:addInventory(item, count)
-    if ItemList[item] then
+    if Items[item] then
         if self.inventory[item] then
-            if (self.weight + (ItemList[item].weight * count)) <= self.maxWeight then
+            if (self.weight + (Items[item].weight * count)) <= self.maxWeight then
                 self.inventory[item].count = self.inventory[item].count + count
-                self.weight = self.weight + (ItemList[item].weight * count)
+                self.weight = self.weight + (Items[item].weight * count)
 
-                local str = string.format("~g~x%s %s", count, ItemList[item].label)
+                local str = string.format("~g~x%s %s", count, Items[item].label)
                 self:notify("item", "Vous avez reçu "..str)
                 self:triggerClient("refreshData:inventory", self.inventory)
                 return true
             else
-                self:notify("item", "Vous avez trop de ~r~"..ItemList[item].label.."~s~ sur vous, ou vous êtes trop lourd.")
+                self:notify("item", "Vous avez trop de ~r~"..Items[item].label.."~s~ sur vous, ou vous êtes trop lourd.")
                 return false
             end
         else
-            if (self.weight + (ItemList[item].weight * count)) <= self.maxWeight then
+            if (self.weight + (Items[item].weight * count)) <= self.maxWeight then
                 self.inventory[item] = {}
-                self.inventory[item].oLabel = ItemList[item].label
-                self.inventory[item].pLabel = ItemList[item].label
+                self.inventory[item].oLabel = Items[item].label
+                self.inventory[item].pLabel = Items[item].label
                 self.inventory[item].name = item
                 self.inventory[item].count = count
-                self.weight = self.weight + (ItemList[item].weight * count)
+                self.weight = self.weight + (Items[item].weight * count)
 
-                local str = string.format("~g~x%s %s", count, ItemList[item].label)
+                local str = string.format("~g~x%s %s", count, Items[item].label)
                 self:notify("item", "Vous avez reçu "..str)
                 self:triggerClient("refreshData:inventory", self.inventory)
                 return true
             else
-                self:notify("item", "Vous avez trop de ~r~"..ItemList[item].label.."~s~ sur vous, ou vous êtes trop lourd.")
+                self:notify("item", "Vous avez trop de ~r~"..Items[item].label.."~s~ sur vous, ou vous êtes trop lourd.")
                 return false
             end
         end
@@ -82,17 +82,17 @@ function Player:addInventory(item, count)
 end
 
 function Player:removeInventory(item, count)
-    if ItemList[item] then
+    if Items[item] then
         if self.inventory[item] then
             if (self.inventory[item].count - count) >= 0 then
                 self.inventory[item].count = self.inventory[item].count - count
-                self.weight = self.weight - (ItemList[item].weight * count)
+                self.weight = self.weight - (Items[item].weight * count)
 
                 if (self.inventory[item].count) == 0 then
                     self.inventory[item] = nil      
                 end
 
-                local str = string.format("~r~x%s %s", count, ItemList[item].label)
+                local str = string.format("~r~x%s %s", count, Items[item].label)
                 self:triggerClient("refreshData:inventory", self.inventory)
             end
         end
@@ -100,7 +100,7 @@ function Player:removeInventory(item, count)
 end
 
 function Player:renameItem(item, newLabel)
-    if ItemList[item] then
+    if Items[item] then
         if self.inventory[item] then
             self.inventory[item].pLabel = newLabel
             self:triggerClient("refreshData:inventory", self.inventory)

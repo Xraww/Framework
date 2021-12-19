@@ -9,12 +9,12 @@ RegisterCommand("giveitem", function(src, args, commandName)
         if #args ~= 3 then 
             myPlayer:notify("error", "Il manque des arguments à votre commande:\n/giveitem id item count") 
         else
-            if ItemList[item] then
+            if Items[item] then
                 if targetPlayer ~= nil and count > 0 then
                     local canCarry, amount = targetPlayer:canCarryItem(item, count)
                     if canCarry then
                         targetPlayer:addInventory(item, count)
-                        myPlayer:notify("success", "Vous avez donné ~b~x1 "..ItemList[item].label.."~s~ à l'id ~r~"..args[1])
+                        myPlayer:notify("success", "Vous avez donné ~b~x1 "..Items[item].label.."~s~ à l'id ~r~"..args[1])
                     else
                         myPlayer:notify("error", "Le joueur n'a pas assez de place, ~b~"..amount.."kg~s~ en trop.")
                     end
@@ -58,24 +58,6 @@ RegisterCommand("saveInventory", function(src, args, commandName)
     end
 end, false)
 
-RegisterCommand("useItem", function(src, args, commandName)
-    local myPlayer = GetPlayer(src)
-    if myPlayer:isAdmin() then
-        local item = args[1] 
-
-        Items.use(src, item)
-    else
-        Trace(("%s %s a essayé: %s"):format(myPlayer.identity.lastname, myPlayer.identity.firtstname, commandName))
-    end
-end, false)
-
-RegisterCommand("inv", function(src, args)
-    local myPlayer = GetPlayer(src)
-    local inventory = myPlayer:getInventory(false)
-
-    print(json.encode(inventory))
-end, false)
-
 RegisterCommand("weight", function(src, args)
     local myPlayer = GetPlayer(src)
     myPlayer:notify("info", "Vous portez: ~b~"..myPlayer.weight.."kg") 
@@ -84,13 +66,6 @@ end, false)
 RegisterCommand("id", function(src, args)
     local myPlayer = GetPlayer(src)
     myPlayer:notify("info", "Vous êtes id: ~b~"..src) 
-end, false)
-
-RegisterCommand("pos", function(src, args)
-    local myPlayer = GetPlayer(src)
-    local c, h = myPlayer:getCoords()
-
-    print(c, h)
 end, false)
 
 RegisterCommand("rank", function(src, args)

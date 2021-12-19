@@ -32,7 +32,7 @@ function Player.create(id, identifier, data)
         local inventory = json.decode(data.inventory)
 
         for name,v in pairs(inventory) do
-            local item = ItemList[name]
+            local item = Items[name]
 
             if item then
                 foundItems[name] = {count = v.count, pLabel = v.pLabel}
@@ -45,8 +45,8 @@ function Player.create(id, identifier, data)
             local count = foundItems[name].count
             local pLabel = foundItems[name].pLabel
 
-            self.inventory[name] = {name = name, label = ItemList[name].label, pLabel = pLabel, count = count}
-            self.weight = self.weight + (ItemList[name].weight * count)
+            self.inventory[name] = {name = name, label = Items[name].label, pLabel = pLabel, count = count}
+            self.weight = self.weight + (Items[name].weight * count)
         end
 	end
 

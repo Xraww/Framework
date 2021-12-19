@@ -85,6 +85,11 @@ function openPersonalMenu()
                         end
                     end
                 })
+                RageUI.Button("Infos", nil, {}, true, {
+                    onSelected = function()
+                        TriggerServerEvent("itemInfos", PersMenu.crtItem.name)
+                    end
+                })
             end)
             Wait(0)
         end
