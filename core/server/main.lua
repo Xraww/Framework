@@ -1,5 +1,3 @@
-local Zones = { }
-
 RegisterNetEvent("initPlayer")
 AddEventHandler("initPlayer", function()
     local src = source
@@ -39,16 +37,6 @@ AddEventHandler('playerDropped', function(reason)
     local src = source
     local player = GetPlayer(src)
     --player:save()
-end)
-
-RegisterNetEvent("sendActualZone")
-AddEventHandler("sendActualZone", function(zone)
-    Zones[source] = zone
-end)
-
-RegisterNetEvent("resetActualZone")
-AddEventHandler("resetActualZone", function()
-    Zones[source] = nil
 end)
 
 function rankExist(rankName)

@@ -22,6 +22,7 @@ AddEventHandler("PlayerInitialized", function(data, items)
 
     LoadPickups()
     PlayerLoaded = true
+    TriggerServerEvent("initZones")
 end)
 
 RegisterNetEvent("refreshData:account", function(newAccount)
@@ -38,8 +39,8 @@ AddEventHandler("notify", function(type, txt)
 end)
 
 RegisterNetEvent("missionNotify")
-AddEventHandler("missionNotify", function(txt)
-    cPlayer:missionNotif(txt)
+AddEventHandler("missionNotify", function(txt, time)
+    cPlayer:missionNotify(txt, time)
 end)
 
 RegisterNetEvent("helpNotify")

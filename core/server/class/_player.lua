@@ -89,7 +89,6 @@ function Player.create(id, identifier, data)
 
 	PlayerData[self.id] = self
 	self:triggerClient("PlayerInitialized", PlayerData[self.id])
-    TriggerEvent("initZones", self.id)
 end
 
 function Player:triggerClient(eventName, ...)
@@ -100,11 +99,11 @@ function Player:notify(type, txt)
     self:triggerClient("notify", type, txt)
 end
 
-function Player:missionNotify(type, txt)
-    self:triggerClient("missionNotify", txt)
+function Player:missionNotify(txt, time)
+    self:triggerClient("missionNotify", txt, time)
 end
 
-function Player:helpNotify(type, txt)
+function Player:helpNotify(txt)
     self:triggerClient("helpNotify", txt)
 end
 

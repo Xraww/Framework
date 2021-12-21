@@ -72,7 +72,7 @@ function Player:notify(type, str)
     end
 end
 
-function Player:missionNotif(msg, time) 
+function Player:missionNotify(msg, time) 
     ClearPrints()
     SetTextEntry_2("STRING")
     AddTextComponentString(msg)
@@ -83,6 +83,6 @@ function Player:helpNotify(msg)
     if not IsHelpMessageOnScreen() then
 		SetTextComponentFormat('STRING')
 		AddTextComponentString(msg)
-		DisplayHelpTextFromStringLabel(0, 0, 1, -1)
+		DisplayHelpTextFromStringLabel(0, 0, 1, 5000)
 	end
 end

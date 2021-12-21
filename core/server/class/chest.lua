@@ -6,7 +6,7 @@ CreateThread(function()
     MySQL.Async.fetchAll('SELECT * FROM chests', {
     }, function(result)
         for _,v in pairs(result) do
-            if not Chest[v.name] then
+            if not Chests[v.name] then
                 Chest.add(v)
             end
         end
@@ -33,8 +33,9 @@ function Chest.add(data)
 
     self.name = data.name
     self.label = data.label
-    self.owner = data.owner or nil
+    self.owner = data.owner
     self.pos = json.decode(data.pos)
+
     self.weight = 0
     self.maxWeight = shConfig.chests_maxWeight
 
@@ -68,6 +69,10 @@ function Chest.add(data)
 
     Chests[self.name] = self
     Trace("Le coffre "..self.label.."^0 a bien été initialisé.")
+end
+
+function Chest:canAccess(owner, name)
+    
 end
 
 function Chest:canStockItem()

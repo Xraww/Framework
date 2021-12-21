@@ -21,7 +21,6 @@ function Zones.create(params)
 end
 
 local ZoneTiming = 500
-local pedExist = false
 
 CreateThread(function()
     while true do
