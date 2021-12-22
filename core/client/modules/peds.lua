@@ -26,10 +26,9 @@ function Peds.create(data)
     setmetatable(self, Peds)
     
     Stream:loadModel(data.hash)
-    self.id = CreatePed(1, GetHashKey(data.hash), data.pos.x, data.pos.y, data.pos.z - 0.98, data.head, data.sync, false)
-    self.pos = {x = data.pos.x, y = data.pos.y, z = data.pos.z, h = data.head}
+    self.id = CreatePed(1, GetHashKey(data.hash), data.pos.x, data.pos.y, data.pos.z - 0.98, data.pos.h, data.sync, false)
+    self.pos = {x = data.pos.x, y = data.pos.y, z = data.pos.z, h = data.pos.h}
     self.exist = DoesEntityExist(self.id)
-    self.showDist = data.showDist
     SetPedDefaultComponentVariation(self.id)
 
     return self

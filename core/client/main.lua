@@ -76,18 +76,23 @@ AddEventHandler("teleportToMarker", function()
 end)
 
 RegisterCommand("createZone", function(src, args, commandName)
-    Blips.create({label = "Magasin", sprite = 52, colour = 43, scale = 0.7, pos = vector3(645.3494, 460.3517, 144.6337)})
-    Ped = {hash = "mp_m_shopkeep_01", pos = vector3(645.3494, 460.3517, 144.6337), head = 168.0, sync = false, showDist = 50.0}
-    Shop = Zones.create({
-        ped = Ped,
-        marker = Markers.create({type = 2, radius = 15.0, pos = vector3(645.3494, 460.3517, 144.6337 + 1.18), width = 0.3, height = 0.3, colour = {r = 0, g = 245, b = 245, a = 185}, blowUp = true, faceCam = true, inversed = true}),
-        pos = vector3(645.3494, 460.3517, 144.6337),
-        radius = 2.0,
-        inputText = "Appuyer sur ~INPUT_CONTEXT~ pour intéragir.",
+    local testPos = GetEntityCoords(PlayerPedId())
+    local pos = {x = testPos.x, y = testPos.y, z = testPos.z}
+    local Shop = Zones.create({
+        name = args[1],
+        pos = vector3(pos.x, pos.y, pos.z),
+        blip = {label = "Magasin", sprite = 52, colour = 43, scale = 0.7, pos = vector3(pos.x, pos.y, pos.z)},
+        ped = {hash = "mp_m_shopkeep_01", pos = vector3(pos.x, pos.y, pos.z), heading = 168.0, sync = false},
+        forJob = "police", -- or jobname
+        marker = Markers.create({type = 1, pos = vector3(pos.x-0.75, pos.y-0.75, pos.z-0.70), width = 1.0, height = 1.0, colour = {r = 0, g = 245, b = 245, a = 185}, blowUp = false, faceCam = true, inversed = true}),
         methode = function()
             Key.onPress("e", function()
                 print("coucou")
             end)
         end,
+        showDistZone = 1.5,
+        showDistPed = 40.0,
+        showDistMarker = 20.0,
+        inputText = "Appuyer sur ~INPUT_CONTEXT~ pour intéragir.",
     })
 end, false)

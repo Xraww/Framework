@@ -5,7 +5,7 @@ Blips.__index = Blips
     Blips = class
     
     *Create blip*
-    local [retVal] = Blips.create(Label, Pos, Sprite, Colour) -- Create Blip
+    local [retVal] = Blips.create({label = "label", pos = vector3(0.0, 0.0, 0.0), scale = 0.7, colour = 54, sprite = 3})
 ]]
 
 function Blips.create(params)

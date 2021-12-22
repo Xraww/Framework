@@ -54,3 +54,15 @@ end
 function Trace(arg)
     print("^6[Xraww]^0 "..arg)
 end
+
+local Zones = {}
+
+RegisterNetEvent("sendActualZone")
+AddEventHandler("sendActualZone", function(zone)
+    Zones[source] = zone
+end)
+
+RegisterNetEvent("resetActualZone")
+AddEventHandler("resetActualZone", function()
+    Zones[source] = nil
+end)
