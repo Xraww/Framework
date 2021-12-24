@@ -88,7 +88,7 @@ function Player.create(id, identifier, data)
     end
 
 	PlayerData[self.id] = self
-	self:triggerClient("PlayerInitialized", PlayerData[self.id])
+	self:triggerClient("GM:PlayerInitialized", PlayerData[self.id])
 end
 
 function Player:triggerClient(eventName, ...)
@@ -96,15 +96,7 @@ function Player:triggerClient(eventName, ...)
 end
 
 function Player:notify(type, txt)
-    self:triggerClient("notify", type, txt)
-end
-
-function Player:missionNotify(txt, time)
-    self:triggerClient("missionNotify", txt, time)
-end
-
-function Player:helpNotify(txt)
-    self:triggerClient("helpNotify", txt)
+    self:triggerClient("GM:notify", type, txt)
 end
 
 function Player:isAdmin()
@@ -155,11 +147,11 @@ function Player:save()
     MySQL.Async.execute('UPDATE players SET rank = @rank, accounts = @accounts, job = @job, faction = @faction, coords = @coords, inventory = @inventory WHERE identifier = @identifier', {
         ['@identifier'] = self.identifier,
         ['@rank'] = self.rank,
-        ['@job'] = json.encode(self.job),
-        ['@faction'] = json.encode(self.faction),
+        ['@job'] = json.encode(self:getJob(true)),
+        ['@faction'] = json.encode(self:getFaction(true)),
         ['@accounts'] = json.encode(self.accounts),
         ['@inventory'] = json.encode(self:getInventory(true)),
         ['@coords'] = json.encode({x = myCoords.x, y = myCoords.y, z = myCoords.z, h = myHead})
     })
-    Trace("[^4"..self.id.."^0] - "..self.identity.lastname.." "..self.identity.firstname.." s'est déconnecté, sauvegarde éffectué")
+    --Trace("[^4"..self.id.."^0] - "..self.identity.lastname.." "..self.identity.firstname.." s'est déconnecté, sauvegarde éffectué")
 end

@@ -26,6 +26,7 @@ function openPersonalMenu()
     CreateThread(function()
         while isMenuOpened do 
             RageUI.IsVisible(main, function()
+                RageUI.Separator(("Poids: ~b~ %s/%skg"):format(cPlayer.weight, shConfig.maxWeight))
                 RageUI.Button('Inventaire', nil, {RightLabel = "→"}, true, {}, mainInv)
             end)
 

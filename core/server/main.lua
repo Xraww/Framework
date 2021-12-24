@@ -35,8 +35,8 @@ end)
 
 AddEventHandler('playerDropped', function(reason)
     local src = source
-    local player = GetPlayer(src)
-    --player:save()
+    local myPlayer = GetPlayer(src)
+    myPlayer:save()
 end)
 
 function rankExist(rankName)

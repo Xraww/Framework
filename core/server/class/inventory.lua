@@ -54,7 +54,7 @@ function Player:addInventory(item, count)
 
                 local str = string.format("~g~x%s %s", count, Items[item].label)
                 self:notify("item", "Vous avez reçu "..str)
-                self:triggerClient("refreshData:inventory", self.inventory)
+                self:triggerClient("GM:refreshData:inventory", self.inventory, self.weight)
                 return true
             else
                 self:notify("item", "Vous avez trop de ~r~"..Items[item].label.."~s~ sur vous, ou vous êtes trop lourd")
@@ -71,7 +71,7 @@ function Player:addInventory(item, count)
 
                 local str = string.format("~g~x%s %s", count, Items[item].label)
                 self:notify("item", "Vous avez reçu "..str)
-                self:triggerClient("refreshData:inventory", self.inventory)
+                self:triggerClient("GM:refreshData:inventory", self.inventory, self.weight)
                 return true
             else
                 self:notify("item", "Vous avez trop de ~r~"..Items[item].label.."~s~ sur vous, ou vous êtes trop lourd")
@@ -92,8 +92,7 @@ function Player:removeInventory(item, count)
                     self.inventory[item] = nil      
                 end
 
-                local str = string.format("~r~x%s %s", count, Items[item].label)
-                self:triggerClient("refreshData:inventory", self.inventory)
+                self:triggerClient("GM:refreshData:inventory", self.inventory, self.weight)
             end
         end
     end
@@ -103,7 +102,7 @@ function Player:renameItem(item, newLabel)
     if Items[item] then
         if self.inventory[item] then
             self.inventory[item].pLabel = newLabel
-            self:triggerClient("refreshData:inventory", self.inventory)
+            self:triggerClient("GM:refreshData:inventory", self.inventory, self.weight)
         end
     end
 end
@@ -114,6 +113,6 @@ function Player:saveInventory()
         ['@identifier'] = self.identifier,
         ['@inventory'] = inventory
     }, function()
-        self:triggerClient("refreshData:inventory", self.inventory)
+        self:triggerClient("GM:refreshData:inventory", self.inventory, self.weight)
     end)
 end

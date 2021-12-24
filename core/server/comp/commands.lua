@@ -155,7 +155,7 @@ RegisterCommand("tpm", function(src, args, commandName)
     local myPlayer = GetPlayer(src)
     
     if myPlayer:isAdmin() then
-        myPlayer:triggerClient("teleportToMarker")
+        myPlayer:triggerClient("GM:teleportToMarker")
     else
         Trace(("%s %s a essayé: %s"):format(myPlayer.identity.lastname, myPlayer.identity.firtstname, commandName))
     end

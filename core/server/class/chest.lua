@@ -29,7 +29,7 @@ end
 
 function Chest.add(data)
     local self = {}
-	setmetatable(self, Chest)
+    setmetatable(self, Chest)
 
     self.name = data.name
     self.label = data.label
@@ -68,22 +68,56 @@ function Chest.add(data)
 	end
 
     Chests[self.name] = self
-    Trace("Le coffre "..self.label.."^0 a bien été initialisé")
+    Trace("Le coffre ^1"..self.label.."^0 a bien été initialisé")
+    Wait(500)
     TriggerClientEvent("Chest:registerChestZoneForServer", -1, Chests)
 end
 
-function Chest:canAccess(owner, name)
-    
+function GetChest(name)
+    return Chests[name]
 end
 
-function Chest:canStockItem()
-
+function Chest:canStockItem(item, count)
+    if Items[item] then
+        if (self.weight + (Items[item].weight * count)) <= self.maxWeight then
+            return true
+        end
+        return false
+    end
+    return false
 end
 
-function Chest:addItem()
-
+function Chest:addItem(item, count)
+    if Items[item] then
+        if self.inventory[item] then
+            self.inventory[item].count = self.inventory[item].count + count
+            self.weight = self.weight + (Items[item].weight * count)
+            return true
+        else
+            self.inventory[item] = {}
+            self.inventory[item].label = Items[item].label
+            self.inventory[item].name = item
+            self.inventory[item].count = count
+            self.weight = self.weight + (Items[item].weight * count)
+            return true
+        end
+        return false
+    end
 end
 
-function Chest:removeItem()
+function Chest:removeItem(item, count)
+    if Items[item] then
+        if self.inventory[item] then
+            if (self.inventory[item].count - count) >= 0 then
+                self.inventory[item].count = self.inventory[item].count - count
+                self.weight = self.weight - (Items[item].weight * count)
 
+                if (self.inventory[item].count) == 0 then
+                    self.inventory[item] = nil      
+                end
+                return true
+            end
+        end
+        return false
+    end
 end

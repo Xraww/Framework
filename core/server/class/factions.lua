@@ -70,6 +70,19 @@ function Player:setFaction(newFaction, newGrade)
     end
 end
 
+function Player:getFaction(minimal)
+    if minimal then
+        local minimalFaction = {}
+
+        for k,v in pairs(self.faction) do
+            minimalFaction = {name = v.name, grade = v.grade.id}
+            return minimalFaction
+        end
+    else
+        return self.faction
+    end
+end
+
 --[[
 RegisterCommand("faction", function()
     CreateFaction({

@@ -59,6 +59,6 @@ function Player:saveAccount()
         ['@identifier'] = self.identifier,
         ['@account'] = account
     }, function()
-        self:triggerClient("refreshData:account", self.account)
+        self:triggerClient("GM:refreshData:account", self.account)
     end)
 end

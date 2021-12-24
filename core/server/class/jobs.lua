@@ -63,12 +63,25 @@ function Player:setJob(newJob, newGrade)
                 }
             }
             self:notify("info", ("Vous avez été recruté %s - %s"):format(Jobs[newJob].label, Jobs[newJob].grades[newGrade].label))
-            self:triggerClient("refreshData:job", self.job)
+            self:triggerClient("GM:refreshData:job", self.job)
         else
             Trace(("Le grade %s du job %s n'existe pas"):format(newGrade, newJob))
         end
     else
         Trace(("Le job %s n'existe pas"):format(newJob))
+    end
+end
+
+function Player:getJob(minimal)
+    if minimal then
+        local minimalJob = {}
+
+        for k,v in pairs(self.job) do
+            minimalJob = {name = v.name, grade = v.grade.id}
+            return minimalJob
+        end
+    else
+        return self.job
     end
 end
 

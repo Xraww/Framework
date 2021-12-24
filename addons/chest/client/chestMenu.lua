@@ -12,7 +12,10 @@ end
 local deposit = RageUI.CreateSubMenu(main, "Déposer objet", desc)
 local take = RageUI.CreateSubMenu(main, "Retirer objet", desc)
 
-function openChest(data)
+local chestInventory = {}
+local received = false
+
+function openChest(chest)
     if isMenuOpened then return end
     isMenuOpened = true
 
@@ -22,11 +25,16 @@ function openChest(data)
     CreateThread(function()
         while isMenuOpened do 
             RageUI.IsVisible(main, function()
-                RageUI.Separator(("Nom du coffre:~b~ %s"):format(data.label))
-                RageUI.Separator(("Poids du coffre:~b~ %skg"):format(data.weight))
+                received = false
+                RageUI.Separator(("Nom du coffre:~b~ %s"):format(chest.label))
+                RageUI.Separator(("Poids du coffre:~b~ %skg"):format(chest.weight))
 
                 RageUI.Button('Déposer objet', nil, {RightLabel = "→"}, true, {}, deposit)
-                RageUI.Button('Retirer objet', nil, {RightLabel = "→"}, true, {}, take)
+                RageUI.Button('Retirer objet', nil, {RightLabel = "→"}, true, {
+                    onSelected = function()
+                        TriggerServerEvent("Chest:getInventory", chest)
+                    end
+                }, take)
             end)
 
             RageUI.IsVisible(deposit, function()
@@ -36,8 +44,9 @@ function openChest(data)
                     for name,item in pairs(cPlayer.inventory) do
                         RageUI.Button(item.pLabel, nil, {RightLabel = "[~b~"..item.count.."~s~]"}, true, {
                             onSelected = function()
-                                local amount = Key.input(3, "Montant:")
-                                TriggerServerEvent("Chest:addItem")
+                                local item = name
+                                local count = Key.input(3, "Montant:")
+                                TriggerServerEvent("Chest:addItem", chest, item, count)
                             end
                         })
                     end
@@ -45,7 +54,19 @@ function openChest(data)
             end)
 
             RageUI.IsVisible(take, function()
-
+                if next(chestInventory) == nil then
+                    RageUI.Separator("Le coffre est ~r~vide")
+                else
+                    for name,item in pairs(chestInventory) do
+                        RageUI.Button(item.label, nil, {RightLabel = "[~b~"..item.count.."~s~]"}, true, {
+                            onSelected = function()
+                                local item = name
+                                local count = Key.input(3, "Montant:")
+                                TriggerServerEvent("Chest:removeItem", chest, item, count)
+                            end
+                        })
+                    end
+                end
             end)
             Wait(0)
         end
@@ -55,4 +76,10 @@ end
 RegisterNetEvent("Chest:openChest")
 AddEventHandler("Chest:openChest", function(data)
     openChest(data)
+end)
+
+RegisterNetEvent("Chest:cbChestInventory")
+AddEventHandler("Chest:cbChestInventory", function(data)
+    chestInventory = data
+    received = true
 end)

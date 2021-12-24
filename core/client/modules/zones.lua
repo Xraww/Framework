@@ -27,7 +27,6 @@ function Zones.create(params)
 
     ZonesAdded[self.name] = self
     print(("[^1Zones^7] Création de la zone ^4%s"):format(self.name))
-    return setmetatable(self, Zones)
 end
 
 local ZoneTiming = 500

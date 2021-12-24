@@ -41,8 +41,9 @@ AddEventHandler("GM:refreshData:account", function(newAccount)
 end)
 
 RegisterNetEvent("GM:refreshData:inventory")
-AddEventHandler("GM:refreshData:inventory", function(newInventory)
+AddEventHandler("GM:refreshData:inventory", function(newInventory, newWeight)
     cPlayer.inventory = newInventory
+    cPlayer.weight = newWeight
 end)
 
 RegisterNetEvent("GM:refreshData:job")

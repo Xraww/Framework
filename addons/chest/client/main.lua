@@ -1,10 +1,10 @@
 local ChestZones = {}
 
 RegisterNetEvent("Chest:registerChestZoneForServer")
-AddEventHandler("Chest:registerChestZoneForServer", function(newChest)
+AddEventHandler("Chest:registerChestZoneForServer", function(chestList)
     CreateThread(function()
-        for k,v in pairs(newChest) do
-            ChestZones[newChest[k].name] = Zones.create({
+        for k,v in pairs(chestList) do
+            ChestZones[chestList[k].name] = Zones.create({
                 name = v.name,
                 pos = v.pos,
                 canSee = v.owner,
