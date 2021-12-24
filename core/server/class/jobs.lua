@@ -62,6 +62,8 @@ function Player:setJob(newJob, newGrade)
                     label = Jobs[newJob].grades[newGrade].label
                 }
             }
+            self:notify("info", ("Vous avez été recruté %s - %s"):format(Jobs[newJob].label, Jobs[newJob].grades[newGrade].label))
+            self:triggerClient("refreshData:job", self.job)
         else
             Trace(("Le grade %s du job %s n'existe pas"):format(newGrade, newJob))
         end
@@ -71,12 +73,17 @@ function Player:setJob(newJob, newGrade)
 end
 
 --[[
-RegisterCommand("job", function()
+RegisterCommand("createJob", function()
     CreateJob({
-        name = "none",
-        label = "Sans emploi",
+        name = "police",
+        label = "LSPD",
         grades = {
-            {id = 1, name = "none", label = "Chômeur", salary = 50}
+            {id = 1, name = "cadet", label = "Cadet", salary = 50},
+            {id = 2, name = "officier", label = "Officier", salary = 75},
+            {id = 3, name = "sergent", label = "Sergent", salary = 100},
+            {id = 4, name = "lieutenant", label = "Lieutenant", salary = 125},
+            {id = 5, name = "capitaine", label = "Capitaine", salary = 150},
+            {id = 6, name = "commandant", label = "Commandant", salary = 175}
         }
     })
 end, false)

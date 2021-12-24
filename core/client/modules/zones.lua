@@ -12,10 +12,11 @@ function Zones.create(params)
         print("[^1Zones^7] Une zone porte déjà le nom: ^1"..params.name)
         return
     end
+
     self.pos = params.pos or nil
     self.blip = params.blip or nil
     self.ped = params.ped or nil
-    self.forJob = params.forJob or nil
+    self.canSee = params.canSee or nil
     self.marker = params.marker or nil
     self.methode = params.methode or nil
     self.showDistZone = params.showDistZone or 1.5
@@ -43,8 +44,8 @@ CreateThread(function()
                 if not zoneState[v.name] then
                     zoneState[v.name] = {blip = false, ped = false}
                 end
-                if v.forJob ~= "no" then
-                    if v.forJob == cPlayer.job.name then
+                if v.canSee ~= "all" then
+                    if v.canSee == cPlayer.job.name or v.canSee == cPlayer.identifier then
                         if v.blip and not zoneState[v.name].blip then
                             local blip = Blips.create({label = v.blip.label, pos = v.blip.pos, scale = v.blip.scale, colour = v.blip.colour, sprite = v.blip.sprite})
                             zoneState[v.name].blip = true
@@ -65,6 +66,11 @@ CreateThread(function()
                             local markerDist = cPlayer:isNear(vector3(v.pos.x, v.pos.y, v.pos.z), v.showDistMarker)
                             if markerDist then
                                 ZoneTiming = 0
+                                ActualZone = v
+                                if not PosSended then
+                                    PosSended = true
+                                    TriggerServerEvent("Zones:setInZone", v)
+                                end
                                 v.marker:showMarker()
                             end
                         end
@@ -75,19 +81,21 @@ CreateThread(function()
                             ActualZone = v
                             if not PosSended then
                                 PosSended = true
-                                TriggerServerEvent("sendActualZone", v)
+                                TriggerServerEvent("Zones:setInZone", v)
                             end
-                            CreateThread(function()
-                                cPlayer:helpNotify(v.inputText)
-                                v.methode()
-                            end)
+                            if not currentInMenu then
+                                CreateThread(function()
+                                    cPlayer:helpNotify(v.inputText)
+                                    v.methode()
+                                end)
+                            end
                         else
                             if ActualZone then 
                                 local zoneDist2 = cPlayer:isNear(vector3(ActualZone.pos.x, ActualZone.pos.y, ActualZone.pos.z), (ActualZone.showDistMarker))
                                 if not zoneDist2 then
                                     ZoneTiming = 500
                                     PosSended = false
-                                    TriggerServerEvent("resetActualZone")
+                                    TriggerServerEvent("Zones:setOutOfZone")
                                     ActualZone = nil
                                 end
                             end
@@ -114,6 +122,11 @@ CreateThread(function()
                         local markerDist = cPlayer:isNear(vector3(v.pos.x, v.pos.y, v.pos.z), v.showDistMarker)
                         if markerDist then
                             ZoneTiming = 0
+                            ActualZone = v
+                            if not PosSended then
+                                PosSended = true
+                                TriggerServerEvent("Zones:setInZone", v)
+                            end
                             v.marker:showMarker()
                         end
                     end
@@ -124,19 +137,21 @@ CreateThread(function()
                         ActualZone = v
                         if not PosSended then
                             PosSended = true
-                            TriggerServerEvent("sendActualZone", v)
+                            TriggerServerEvent("Zones:setInZone", v)
                         end
-                        CreateThread(function()
-                            cPlayer:helpNotify(v.inputText)
-                            v.methode()
-                        end)
+                        if not currentInMenu then
+                            CreateThread(function()
+                                cPlayer:helpNotify(v.inputText)
+                                v.methode()
+                            end)
+                        end
                     else
                         if ActualZone then 
                             local zoneDist2 = cPlayer:isNear(vector3(ActualZone.pos.x, ActualZone.pos.y, ActualZone.pos.z), (ActualZone.showDistMarker))
                             if not zoneDist2 then
                                 ZoneTiming = 500
                                 PosSended = false
-                                TriggerServerEvent("resetActualZone")
+                                TriggerServerEvent("Zones:setOutOfZone")
                                 ActualZone = nil
                             end
                         end
@@ -162,3 +177,23 @@ function Zones:deletePed()
         self.spawnedPed = nil
     end
 end
+
+--[[
+    local var = Zones.create({
+        name = "test",
+        pos = vector3(0.0, 0.0, 0.0),
+        blip = {label = "Magasin", sprite = 52, colour = 43, scale = 0.7, pos = vector3(0.0, 0.0, 0.0)},
+        ped = {hash = "mp_m_shopkeep_01", pos = vector3(0.0, 0.0, 0.0), heading = 168.0, sync = false},
+        canSee = "police", -- or "all"
+        marker = Markers.create({type = 1, pos = vector3(0.0, 0.0, 0.0), width = 1.0, height = 1.0, colour = {r = 0, g = 245, b = 245, a = 185}, blowUp = false, faceCam = true, inversed = true}),
+        methode = function()
+            Key.onPress("e", function()
+                print("coucou")
+            end)
+        end,
+        showDistZone = 1.5,
+        showDistPed = 40.0,
+        showDistMarker = 20.0,
+        inputText = "Appuyer sur ~INPUT_CONTEXT~ pour intéragir",
+    })
+--]]

@@ -7,6 +7,7 @@ end
 local main = RageUI.CreateMenu(title, desc)
 main.Closed = function()
     isMenuOpened = false
+    setPlayerInMenu()
 end
 local mainInv =  RageUI.CreateSubMenu(main, "Inventaire", desc)
 local invActions = RageUI.CreateSubMenu(mainInv, "Utilisation", desc)
@@ -20,6 +21,7 @@ function openPersonalMenu()
     isMenuOpened = true
 
     RageUI.Visible(main, not RageUI.Visible(main))
+    setPlayerInMenu()
 
     CreateThread(function()
         while isMenuOpened do 
@@ -44,16 +46,16 @@ function openPersonalMenu()
             RageUI.IsVisible(invActions, function()
                 RageUI.Button("Utiliser", nil, {}, true, {
                     onSelected = function()
-                        TriggerServerEvent("useItem", PersMenu.crtItem.name)
+                        TriggerServerEvent("PersMenu:useItem", PersMenu.crtItem.name)
                     end
                 })
-                RageUI.Button("Renommer", "Tous vos items de ce type porteront le même nom.", {}, true, {
+                RageUI.Button("Renommer", "Tous vos items de ce type porteront le même nom", {}, true, {
                     onSelected = function()
                         local newLabel = Key.input(25, "Nouveau label:")
                         if newLabel ~= nil then
-                            TriggerServerEvent("renameItem", PersMenu.crtItem.name, newLabel)
+                            TriggerServerEvent("PersMenu:renameItem", PersMenu.crtItem.name, newLabel)
                         else
-                            cPlayer:notify("error", "Champ invalide.")
+                            cPlayer:notify("error", "Champ invalide")
                         end
                     end
                 })
@@ -63,12 +65,12 @@ function openPersonalMenu()
                         if closestPlayer ~= nil and -1 then
                             local count = Key.input(3, "Quantité:")
                             if count ~= nil and tonumber(count) > 0 and tonumber(count) <= PersMenu.crtItem.count then
-                                TriggerServerEvent("giveItem", closestPlayer, PersMenu.crtItem.name, tonumber(count))
+                                TriggerServerEvent("PersMenu:giveItem", closestPlayer, PersMenu.crtItem.name, tonumber(count))
                             else
                                 cPlayer:notify("error", ("Vous n'avez pas assez de: ~b~%s ~s~(%s)"):format(PersMenu.crtItem.label, PersMenu.crtItem.count))
                             end
                         else
-                            cPlayer:notify("error", "Aucune personne proche de vous.")
+                            cPlayer:notify("error", "Aucune personne proche de vous")
                         end
                     end,
                     onHovered = function()
@@ -79,7 +81,7 @@ function openPersonalMenu()
                     onSelected = function()
                         local count = Key.input(3, "Quantité:")
                         if count ~= nil and tonumber(count) > 0 and tonumber(count) <= PersMenu.crtItem.count then
-                            TriggerServerEvent("dropItem", PersMenu.crtItem.name, tonumber(count), GetEntityCoords(GetPlayerPed(-1)))
+                            TriggerServerEvent("PersMenu:dropItem", PersMenu.crtItem.name, tonumber(count), GetEntityCoords(GetPlayerPed(-1)))
                         else
                             cPlayer:notify("error", ("Vous n'avez pas assez de: ~b~%s ~s~(%s)"):format(PersMenu.crtItem.label, PersMenu.crtItem.count))
                         end
@@ -87,7 +89,7 @@ function openPersonalMenu()
                 })
                 RageUI.Button("Infos", nil, {}, true, {
                     onSelected = function()
-                        TriggerServerEvent("itemInfos", PersMenu.crtItem.name)
+                        TriggerServerEvent("PersMenu:itemInfos", PersMenu.crtItem.name)
                     end
                 })
             end)

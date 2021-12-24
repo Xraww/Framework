@@ -24,7 +24,7 @@ function Player:useItem(item)
     if self:canUseItem(item) then
         Items.use(self.id, item)
     else
-        self:notify("error", "Vous ne pouvez pas utiliser cet item.")
+        self:notify("error", "Vous ne pouvez pas utiliser cet item")
     end
 end
 
@@ -57,7 +57,7 @@ function Player:addInventory(item, count)
                 self:triggerClient("refreshData:inventory", self.inventory)
                 return true
             else
-                self:notify("item", "Vous avez trop de ~r~"..Items[item].label.."~s~ sur vous, ou vous êtes trop lourd.")
+                self:notify("item", "Vous avez trop de ~r~"..Items[item].label.."~s~ sur vous, ou vous êtes trop lourd")
                 return false
             end
         else
@@ -74,7 +74,7 @@ function Player:addInventory(item, count)
                 self:triggerClient("refreshData:inventory", self.inventory)
                 return true
             else
-                self:notify("item", "Vous avez trop de ~r~"..Items[item].label.."~s~ sur vous, ou vous êtes trop lourd.")
+                self:notify("item", "Vous avez trop de ~r~"..Items[item].label.."~s~ sur vous, ou vous êtes trop lourd")
                 return false
             end
         end

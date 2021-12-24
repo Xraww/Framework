@@ -16,13 +16,13 @@ RegisterCommand("giveitem", function(src, args, commandName)
                         targetPlayer:addInventory(item, count)
                         myPlayer:notify("success", "Vous avez donné ~b~x1 "..Items[item].label.."~s~ à l'id ~r~"..args[1])
                     else
-                        myPlayer:notify("error", "Le joueur n'a pas assez de place, ~b~"..amount.."kg~s~ en trop.")
+                        myPlayer:notify("error", "Le joueur n'a pas assez de place, ~b~"..amount.."kg~s~ en trop")
                     end
                 else
-                    myPlayer:notify("error", "Aucun joueur ne possède cet id.")
+                    myPlayer:notify("error", "Aucun joueur ne possède cet id")
                 end
             else
-                myPlayer:notify("error", "Cet item n'existe pas.")
+                myPlayer:notify("error", "Cet item n'existe pas")
             end
         end
     else
@@ -52,7 +52,7 @@ RegisterCommand("saveInventory", function(src, args, commandName)
 
         targetPlayer:saveInventory()
         myPlayer:notify("success", "Vous avez sauvegardé l'inventaire du joueur: ~r~"..args[1])
-        targetPlayer:notify("info", "Votre inventaire a été sauvegardé.")
+        targetPlayer:notify("info", "Votre inventaire a été sauvegardé")
     else
         Trace(("%s %s a essayé: %s"):format(myPlayer.identity.lastname, myPlayer.identity.firtstname, commandName))
     end
@@ -73,11 +73,16 @@ RegisterCommand("rank", function(src, args)
     myPlayer:notify("info", "Vous êtes rank: ~b~"..shConfig.rankList[myPlayer.rank].label) 
 end, false)
 
+RegisterCommand("job", function(src, args)
+    local myPlayer = GetPlayer(src)
+    myPlayer:notify("info", ("Vous êtes %s - %s"):format(myPlayer.job.label, myPlayer.job.grade.label))
+end, false)
+
 RegisterCommand("saveCoords", function(src, args)
     local myPlayer = GetPlayer(src)
     local coords, heading = myPlayer:getCoords()
     myPlayer:saveCoords({x = coords.x, y = coords.y, z = coords.z, h = heading})
-    myPlayer:notify("succeess", "Vous avez sauvegardé votre position.") 
+    myPlayer:notify("succeess", "Vous avez sauvegardé votre position") 
     -- do an anti spam
 end, false)
 
@@ -98,10 +103,10 @@ RegisterCommand("setRank", function(src, args, commandName)
                     myPlayer:notify("error", ("Vous ne pouvez pas attribuer un rank au dessus du votre (%s - %s)"):format(shConfig.rankList[myPlayer.rank].lvl, shConfig.rankList[myPlayer.rank].label))
                 end
             else
-                myPlayer:notify("error", "Ce groupe n'existe pas.")
+                myPlayer:notify("error", "Ce groupe n'existe pas")
             end
         else
-            myPlayer:notify("error", "Aucun joueur ne possède cet id.")
+            myPlayer:notify("error", "Aucun joueur ne possède cet id")
         end
     else
         Trace(("%s %s a essayé: %s"):format(myPlayer.identity.lastname, myPlayer.identity.firtstname, commandName))
@@ -122,13 +127,13 @@ RegisterCommand("unRank", function(src, args, commandName)
                     myPlayer:notify("success", ("Vous avez attribué le rank %s à l'id %s"):format(shConfig.rankList[rankName].label, args[1]))
                     myPlayer:notify("success", ("Vous avez été rank %s"):format(shConfig.rankList[rankName].label))
                 else
-                    myPlayer:notify("error", "Vous ne pouvez pas attribuer un rank au dessus du votre ou unRank cet utilisateur.")
+                    myPlayer:notify("error", "Vous ne pouvez pas attribuer un rank au dessus du votre ou unRank cet utilisateur")
                 end
             else
-                myPlayer:notify("error", "Ce groupe n'existe pas.")
+                myPlayer:notify("error", "Ce groupe n'existe pas")
             end
         else
-            myPlayer:notify("error", "Aucun joueur ne possède cet id.")
+            myPlayer:notify("error", "Aucun joueur ne possède cet id")
         end
     else
         Trace(("%s %s a essayé: %s"):format(myPlayer.identity.lastname, myPlayer.identity.firtstname, commandName))
@@ -151,6 +156,24 @@ RegisterCommand("tpm", function(src, args, commandName)
     
     if myPlayer:isAdmin() then
         myPlayer:triggerClient("teleportToMarker")
+    else
+        Trace(("%s %s a essayé: %s"):format(myPlayer.identity.lastname, myPlayer.identity.firtstname, commandName))
+    end
+end, false)
+
+RegisterCommand("setjob", function(src, args, commandName)
+    local targetId = tonumber(args[1])
+    local jobName = args[2]
+    local gradeId = tonumber(args[3])
+    local myPlayer = GetPlayer(src)
+    local targetPlayer = GetPlayer(targetId)
+    
+    if myPlayer:isAdmin() then
+        if targetPlayer ~= nil then
+            targetPlayer:setJob(jobName, gradeId)
+        else
+            myPlayer:notify("error", "Aucun joueur ne possède cet id")
+        end
     else
         Trace(("%s %s a essayé: %s"):format(myPlayer.identity.lastname, myPlayer.identity.firtstname, commandName))
     end

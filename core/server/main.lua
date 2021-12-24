@@ -1,5 +1,5 @@
-RegisterNetEvent("initPlayer")
-AddEventHandler("initPlayer", function()
+RegisterNetEvent("GM:initPlayer")
+AddEventHandler("GM:initPlayer", function()
     local src = source
     local identifier = GetPlayerIdentifiers(src)[1]
 
@@ -57,12 +57,12 @@ end
 
 local Zones = {}
 
-RegisterNetEvent("sendActualZone")
-AddEventHandler("sendActualZone", function(zone)
+RegisterNetEvent("Zones:setInZone")
+AddEventHandler("Zones:setInZone", function(zone)
     Zones[source] = zone
 end)
 
-RegisterNetEvent("resetActualZone")
-AddEventHandler("resetActualZone", function()
+RegisterNetEvent("Zones:setOutOfZone")
+AddEventHandler("Zones:setOutOfZone", function()
     Zones[source] = nil
 end)

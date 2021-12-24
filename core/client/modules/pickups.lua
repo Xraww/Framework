@@ -1,8 +1,8 @@
 local pickups = {}
 local nearObjs = {}
 
-RegisterNetEvent("SendAllPickups")
-AddEventHandler("SendAllPickups", function(pick, id, del, newCount)
+RegisterNetEvent("GM:SendAllPickups")
+AddEventHandler("GM:SendAllPickups", function(pick, id, del, newCount)
     for k,v in pairs(nearObjs) do
         DeleteEntity(v.entity)
     end
@@ -56,7 +56,7 @@ function LoadPickups()
                     if IsControlJustReleased(0, 38) then
                         local amount = tonumber(Key.input(3, "Quantité:"))
                         if amount <= v.count then
-                            TriggerServerEvent("takePickup", v.id, v.item, amount, v.count)
+                            TriggerServerEvent("GM:takePickup", v.id, v.item, amount, v.count)
                             if amount == v.count then
                                 if v.id == nil then break end
                                 pickups[v.id].added = false

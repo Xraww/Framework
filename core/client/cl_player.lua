@@ -4,6 +4,7 @@ Player.__index = Player
 function Player.create(data)
     local self = {}
 
+    self.identifier = data.identifier
     self.id = data.id
     self.weight = data.weight
     self.maxWeight = shConfig.maxWeight

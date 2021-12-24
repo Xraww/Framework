@@ -8,14 +8,14 @@ RegisterCommand("chestCreator", function(src, args, commandName)
     end
 end, false)
 
-RegisterNetEvent("createChest")
-AddEventHandler("createChest", function(data)
+RegisterNetEvent("Chest:createChest")
+AddEventHandler("Chest:createChest", function(data)
     local player = GetPlayer(source)
 
     if not Chests[data.name] then
         local params = {name = data.name, label = data.label, owner = nil, pos = data.pos}
 
-        if data.owner == "me" then
+        if data.owner == "moi" then
             params.owner = player.identifier
         else
             params.owner = data.owner
@@ -24,8 +24,13 @@ AddEventHandler("createChest", function(data)
         if data.code then params.code = data.code end
 
         Chest.create(params)
-        player:notify("success", "Votre coffre a bien été crée !")
+        player:notify("success", "Votre coffre a bien été crée")
     else
-        player:notify("error", "Un coffre avec ce nom existe déjà.")
+        player:notify("error", "Un coffre avec ce nom existe déjà")
     end
+end)
+
+RegisterNetEvent("Chest:addItem")
+AddEventHandler("Chest:addItem", function()
+
 end)

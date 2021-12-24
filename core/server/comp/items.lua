@@ -22,13 +22,13 @@ function Items.create(params)
         ['@weight'] = params.weight,
     }, function()
         Items.add(params)
-        Trace("L'item ^4"..params.label.."^0 a bien été crée et sauvegardé.")
+        Trace("L'item ^4"..params.label.."^0 a bien été crée et sauvegardé")
     end)
 end
 
 function Items.add(params)
     if Items[params.name] then
-        Trace("L'item ^1"..params.name.."^0 existe déjà.")
+        Trace("L'item ^1"..params.name.."^0 existe déjà")
     else
         Items[params.name] = {
             name = params.name, 
@@ -37,7 +37,7 @@ function Items.add(params)
             weight = params.weight,
             handler = nil,
         }
-        Trace("L'item ^4"..Items[params.name].label.."^0 a bien été initialisé.")
+        Trace("L'item ^4"..Items[params.name].label.."^0 a bien été initialisé")
     end
 end
 
@@ -49,7 +49,7 @@ function Items.registerUsage(item, handler)
         if Items[item] and handler then
             Items[item].handler = handler
         else
-            Trace("L'item ^1"..item.."^0 n'existe pas ou ne possède pas d'usage.")
+            Trace("L'item ^1"..item.."^0 n'existe pas ou ne possède pas d'usage")
         end
     end)
 end
@@ -59,7 +59,7 @@ function Items.use(source, item)
     if Items[item] and Items[item].handler then
         Items[item].handler(src)
     else
-        Trace("L'item ^1"..item.."^0 n'existe pas ou ne possède pas d'usage.")
+        Trace("L'item ^1"..item.."^0 n'existe pas ou ne possède pas d'usage")
     end
 end
 
@@ -79,8 +79,8 @@ end
 
 pickups = {}
 
-RegisterNetEvent("takePickup")
-AddEventHandler("takePickup", function(id, item, amount, count)
+RegisterNetEvent("GM:takePickup")
+AddEventHandler("GM:takePickup", function(id, item, amount, count)
     GetPickupIfCan(source, id, item, amount, count)
 end)
 
@@ -91,10 +91,10 @@ function GetPickupIfCan(id, idPickup, item, amount, count)
             if player:addInventory(item, amount) then
                 if pickups[idPickup].count - amount == 0 then
                     pickups[idPickup] = nil
-                    TriggerClientEvent("SendAllPickups", -1, pickups, idPickup, true, 0)
+                    TriggerClientEvent("GM:SendAllPickups", -1, pickups, idPickup, true, 0)
                 elseif pickups[idPickup].count - amount > 0 then
                     pickups[idPickup].count = pickups[idPickup].count - amount
-                    TriggerClientEvent("SendAllPickups", -1, pickups, idPickup, false, pickups[idPickup].count)
+                    TriggerClientEvent("GM:SendAllPickups", -1, pickups, idPickup, false, pickups[idPickup].count)
                 elseif pickups[idPickup].count - amount < 0 then
                     return
                 end

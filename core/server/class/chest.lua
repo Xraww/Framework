@@ -23,7 +23,7 @@ function Chest.create(data)
         ['@pos'] = posEnc,
     }, function()
         Chest.add(data)
-        Trace("Le coffre "..data.label.."^0 a bien été sauvegardé.")
+        Trace("Le coffre "..data.label.."^0 a bien été sauvegardé")
     end)
 end
 
@@ -68,7 +68,8 @@ function Chest.add(data)
 	end
 
     Chests[self.name] = self
-    Trace("Le coffre "..self.label.."^0 a bien été initialisé.")
+    Trace("Le coffre "..self.label.."^0 a bien été initialisé")
+    TriggerClientEvent("Chest:registerChestZoneForServer", -1, Chests)
 end
 
 function Chest:canAccess(owner, name)

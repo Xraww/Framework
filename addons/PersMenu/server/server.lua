@@ -1,18 +1,18 @@
-RegisterNetEvent("useItem")
-AddEventHandler("useItem", function(item)
+RegisterNetEvent("PersMenu:useItem")
+AddEventHandler("PersMenu:useItem", function(item)
     local myPlayer = GetPlayer(source)
     myPlayer:useItem(item)
 end)
 
-RegisterNetEvent("renameItem")
-AddEventHandler("renameItem", function(item, newLabel)
+RegisterNetEvent("PersMenu:renameItem")
+AddEventHandler("PersMenu:renameItem", function(item, newLabel)
     local player = GetPlayer(source)
 
     player:renameItem(item, newLabel)
 end)
 
-RegisterNetEvent("giveItem")
-AddEventHandler("giveItem", function(targetId, item, count)
+RegisterNetEvent("PersMenu:giveItem")
+AddEventHandler("PersMenu:giveItem", function(targetId, item, count)
     local myPlayer = GetPlayer(source)
     local targetPlayer = GetPlayer(targetId)
 
@@ -23,24 +23,24 @@ AddEventHandler("giveItem", function(targetId, item, count)
             myPlayer:removeInventory(item, count)
             myPlayer:notify("success", "Vous avez donné ~b~x1 "..Items[item].label)
         else
-            myPlayer:notify("error", "Le joueur n'a pas assez de place.")
+            myPlayer:notify("error", "Le joueur n'a pas assez de place")
         end
     else
-        myPlayer:notify("error", "Cet item n'existe pas.")
+        myPlayer:notify("error", "Cet item n'existe pas")
     end
 end)
 
-RegisterNetEvent("dropItem")
-AddEventHandler("dropItem", function(item, count, coords)
+RegisterNetEvent("PersMenu:dropItem")
+AddEventHandler("PersMenu:dropItem", function(item, count, coords)
     local player = GetPlayer(source)
 
     player:removeInventory(item, count)
     pickups[#pickups+1] = {item = item, label = Items[item].label, count = count, coords = coords, added = false}
-    TriggerClientEvent("SendAllPickups", -1, pickups)
+    TriggerClientEvent("GM:SendAllPickups", -1, pickups)
 end)
 
-RegisterNetEvent("itemInfos")
-AddEventHandler("itemInfos", function(item)
+RegisterNetEvent("PersMenu:itemInfos")
+AddEventHandler("PersMenu:itemInfos", function(item)
     local player = GetPlayer(source)
     local haveUsage = "non"
 
