@@ -8,6 +8,7 @@ AddEventHandler("GM:initPlayer", function()
 	}, function(alreadyExist)
         if alreadyExist[1] then
             sPlayer = Player.create(src, identifier, alreadyExist[1])
+            sPlayer:enterBucket()
             Trace("Initialisation d'un joueur avec l'id: [^4"..src.."^0]")
         else
             local baseAccounts = json.encode(sConfig.Base.Accounts)
@@ -28,6 +29,7 @@ AddEventHandler("GM:initPlayer", function()
                     faction = baseFaction,
                 }
                 sPlayer = Player.create(src, identifier, data)
+                sPlayer:enterBucket()
             end)
         end
     end)

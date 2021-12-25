@@ -87,3 +87,30 @@ AddEventHandler("GM:teleportToMarker", function()
         cPlayer:notify("error", "Vous n'avez pas placé de marker")
     end
 end)
+
+local bucketId = nil
+local id = GetPlayerServerId(PlayerId())
+
+RegisterNetEvent("GM:getDevInfos")
+AddEventHandler("GM:getDevInfos", function(_bucketId)
+    bucketId = _bucketId
+end)
+
+CreateThread(function()
+    while true do 
+		local y, m, d, h, min, s = GetLocalTime()
+		local date = (("%s:%s:%s"):format(h, min, s))
+
+        SetTextColour(255, 255, 255, 255)
+		SetTextFont(4)
+		SetTextScale(0.4, 0.4)
+		SetTextWrap(0.0, 1.0)
+		SetTextCentre(false)
+		SetTextDropshadow(2, 2, 0, 0, 0)
+		SetTextEdge(1, 0, 0, 0, 205)
+		SetTextEntry("STRING")
+		AddTextComponentString(("Bucket: %s\nId: %s\nTime: %s"):format(bucketId, id, date))
+		DrawText(0.95, 0.001)
+        Wait(0)
+    end
+end)

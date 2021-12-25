@@ -14,6 +14,7 @@ local invActions = RageUI.CreateSubMenu(mainInv, "Utilisation", desc)
 
 local PersMenu = {
     crtItem = {},
+    checked = false,
 }
 
 function openPersonalMenu()
@@ -26,7 +27,6 @@ function openPersonalMenu()
     CreateThread(function()
         while isMenuOpened do 
             RageUI.IsVisible(main, function()
-                RageUI.Separator(("Poids: ~b~ %s/%skg"):format(cPlayer.weight, shConfig.maxWeight))
                 RageUI.Button('Inventaire', nil, {RightLabel = "→"}, true, {}, mainInv)
             end)
 
@@ -34,10 +34,21 @@ function openPersonalMenu()
                 if next(cPlayer.inventory) == nil then
                     RageUI.Separator("Votre sac est ~r~vide")
                 else
-                    for _,v in pairs(cPlayer.inventory) do
-                        RageUI.Button(v.label, nil, {RightLabel = "[~b~"..v.count.."~s~]"}, true, {
+                    RageUI.Separator(("Poids: ~b~%s/%skg"):format(cPlayer.weight, shConfig.maxWeight))
+
+                    RageUI.Checkbox('Afficher le poids des items', nil, PersMenu.checked, {}, {
+                        onChecked = function()
+                            PersMenu.checked = true
+                        end,
+                        onUnChecked = function()
+                            PersMenu.checked = false
+                        end,
+                    })
+
+                    for name,item in pairs(cPlayer.inventory) do
+                        RageUI.Button((item.label..(PersMenu.checked and " ~r~[%skg]" or "")):format(item.count*cItems[name].weight), nil, {RightLabel = "[~b~"..item.count.."~s~]"}, true, {
                             onSelected = function()
-                                PersMenu.crtItem = v
+                                PersMenu.crtItem = item
                             end
                         }, invActions)
                     end

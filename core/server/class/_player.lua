@@ -91,6 +91,7 @@ function Player.create(id, identifier, data)
 
 	PlayerData[self.id] = self
 	self:triggerClient("GM:PlayerInitialized", PlayerData[self.id], Items)
+    self:triggerClient("GM:getDevInfos", GetPlayerRoutingBucket(self.id))
     Wait(3000)
     TriggerClientEvent("Chest:registerChestZoneForServer", self.id, Chests)
 end
@@ -144,6 +145,24 @@ function Player:isNearZone()
         end
         DropPlayer(self.id, "[Anticheat] - Téléportation")
     end
+end
+
+function Player:enterBucket(id)
+    if id then
+        SetPlayerRoutingBucket(self.id, id)
+        SetRoutingBucketPopulationEnabled(id, false)
+        SetEntityRoutingBucket(GetPlayerPed(self.id), id)
+    else
+        SetPlayerRoutingBucket(self.id, (self.id + 1000))
+        SetRoutingBucketPopulationEnabled((self.id + 1000), false)
+        SetEntityRoutingBucket(GetPlayerPed(self.id), (self.id + 1000))
+    end
+end
+
+function Player:leaveBucket()
+    SetPlayerRoutingBucket(self.id, publicSession.id)
+    SetRoutingBucketPopulationEnabled(publicSession.id, true)
+    SetEntityRoutingBucket(GetPlayerPed(self.id), publicSession.id)
 end
 
 function Player:save(disconected)

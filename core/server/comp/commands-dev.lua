@@ -32,3 +32,17 @@ RegisterCommand("createItem", function(src, args, commandName)
     }
     Items.create(params)
 end, false)
+
+RegisterCommand("setInBucket", function(src, args)
+    local myPlayer = GetPlayer(src)
+    local state = args[1]
+    local bucketId = tonumber(args[2])
+
+    if state == "enter" then
+        myPlayer:enterBucket(bucketId)
+        myPlayer:triggerClient("GM:getDevInfos", GetPlayerRoutingBucket(myPlayer.id), os.date("%X"))
+    else
+        myPlayer:leaveBucket()
+        myPlayer:triggerClient("GM:getDevInfos", GetPlayerRoutingBucket(myPlayer.id), os.date("%X"))
+    end
+end, false)
