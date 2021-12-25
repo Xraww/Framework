@@ -35,17 +35,16 @@ function Player.create(id, identifier, data)
             local item = Items[name]
 
             if item then
-                foundItems[name] = {count = v.count, pLabel = v.pLabel}
+                foundItems[name] = v.count
             else
                 Trace(("Item ^1invalide^0 (^4%s^0) détecté dans l'inventaire du joueur: %s"):format(name, self.identifier))
             end
         end
 
         for name, item in pairs(foundItems) do
-            local count = foundItems[name].count
-            local pLabel = foundItems[name].pLabel
+            local count = foundItems[name]
 
-            self.inventory[name] = {name = name, label = Items[name].label, pLabel = pLabel, count = count}
+            self.inventory[name] = {name = name, label = Items[name].label, count = count}
             self.weight = self.weight + (Items[name].weight * count)
         end
 	end

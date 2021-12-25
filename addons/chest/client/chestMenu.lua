@@ -53,7 +53,7 @@ function openChest(chest)
                         end,
                     })
                     for name,item in pairs(cPlayer.inventory) do
-                        RageUI.Button((item.pLabel..(checked and " ~r~[%skg]" or "")):format(item.count*cItems[name].weight), nil, {RightLabel = "[~b~x"..item.count.."~s~]"}, true, {
+                        RageUI.Button((item.label..(checked and " ~r~[%skg]" or "")):format(item.count*cItems[name].weight), nil, {RightLabel = "[~b~x"..item.count.."~s~]"}, true, {
                             onSelected = function()
                                 local item = name
                                 local count = Key.input(3, "Montant:")

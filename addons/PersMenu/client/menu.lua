@@ -35,7 +35,7 @@ function openPersonalMenu()
                     RageUI.Separator("Votre sac est ~r~vide")
                 else
                     for _,v in pairs(cPlayer.inventory) do
-                        RageUI.Button(v.pLabel, nil, {RightLabel = "[~b~"..v.count.."~s~]"}, true, {
+                        RageUI.Button(v.label, nil, {RightLabel = "[~b~"..v.count.."~s~]"}, true, {
                             onSelected = function()
                                 PersMenu.crtItem = v
                             end
@@ -48,16 +48,6 @@ function openPersonalMenu()
                 RageUI.Button("Utiliser", nil, {}, true, {
                     onSelected = function()
                         TriggerServerEvent("PersMenu:useItem", PersMenu.crtItem.name)
-                    end
-                })
-                RageUI.Button("Renommer", "Tous vos items de ce type porteront le même nom", {}, true, {
-                    onSelected = function()
-                        local newLabel = Key.input(25, "Nouveau label:")
-                        if newLabel ~= nil then
-                            TriggerServerEvent("PersMenu:renameItem", PersMenu.crtItem.name, newLabel)
-                        else
-                            cPlayer:notify("error", "Champ invalide")
-                        end
                     end
                 })
                 RageUI.Button("Donner", nil, {}, true, {

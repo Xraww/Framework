@@ -4,13 +4,6 @@ AddEventHandler("PersMenu:useItem", function(item)
     myPlayer:useItem(item)
 end)
 
-RegisterNetEvent("PersMenu:renameItem")
-AddEventHandler("PersMenu:renameItem", function(item, newLabel)
-    local player = GetPlayer(source)
-
-    player:renameItem(item, newLabel)
-end)
-
 RegisterNetEvent("PersMenu:giveItem")
 AddEventHandler("PersMenu:giveItem", function(targetId, item, count)
     local myPlayer = GetPlayer(source)
