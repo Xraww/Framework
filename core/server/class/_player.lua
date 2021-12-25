@@ -31,11 +31,11 @@ function Player.create(id, identifier, data)
         local foundItems = {}
         local inventory = json.decode(data.inventory)
 
-        for name,v in pairs(inventory) do
+        for name,count in pairs(inventory) do
             local item = Items[name]
 
             if item then
-                foundItems[name] = v.count
+                foundItems[name] = count
             else
                 Trace(("Item ^1invalide^0 (^4%s^0) détecté dans l'inventaire du joueur: %s"):format(name, self.identifier))
             end

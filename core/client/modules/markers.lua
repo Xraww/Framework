@@ -29,5 +29,6 @@ function Markers:showMarker()
     if self.inversed then
         rot = 180.0
     end
-    self.id = DrawMarker(self.type, self.pos.x, self.pos.y, self.pos.z, 0.0, 0.0, 0.0, 0.0, rot, 0.0, self.width, self.width, self.height, self.colour.r, self.colour.g, self.colour.b, self.colour.a, self.blowUp, self.faceCam, 2, nil, nil, false)
+    local posZ = self.pos.z-0.95
+    self.id = DrawMarker(self.type, self.pos.x, self.pos.y, posZ, 0.0, 0.0, 0.0, 0.0, rot, 0.0, self.width, self.width, self.height, self.colour.r, self.colour.g, self.colour.b, self.colour.a, self.blowUp, self.faceCam, 2, nil, nil, false)
 end

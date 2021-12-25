@@ -43,13 +43,70 @@ CreateThread(function()
                 if not zoneState[v.name] then
                     zoneState[v.name] = {blip = false, ped = false}
                 end
-                if v.canSee ~= "all" then
-                    if v.canSee == cPlayer.job.name or v.canSee == cPlayer.identifier then
+                for _,owner in pairs(v.canSee) do
+                    if owner ~= "all" then
+                        if owner == cPlayer.job.name or owner == cPlayer.faction.name or owner == cPlayer.identifier then
+                            if v.blip and not zoneState[v.name].blip then
+                                local blip = Blips.create({label = v.blip.label, pos = v.blip.pos, scale = v.blip.scale, colour = v.blip.colour, sprite = v.blip.sprite})
+                                zoneState[v.name].blip = true
+                            end
+        
+                            if v.ped then
+                                local pedDist = cPlayer:isNear(vector3(v.ped.pos.x, v.ped.pos.y, v.ped.pos.z), v.showDistPed)
+                                if pedDist and not zoneState[v.name].ped then
+                                    v:showPed()
+                                    zoneState[v.name].ped = true
+                                elseif not pedDist and zoneState[v.name].ped then
+                                    v:deletePed()
+                                    zoneState[v.name].ped = false
+                                end
+                            end
+        
+                            if v.marker then
+                                local markerDist = cPlayer:isNear(vector3(v.pos.x, v.pos.y, v.pos.z), v.showDistMarker)
+                                if markerDist then
+                                    ZoneTiming = 0
+                                    ActualZone = v
+                                    if not PosSended then
+                                        PosSended = true
+                                        TriggerServerEvent("Zones:setInZone", v)
+                                    end
+                                    v.marker:showMarker()
+                                end
+                            end
+
+                            local zoneDist = cPlayer:isNear(vector3(v.pos.x, v.pos.y, v.pos.z), v.showDistZone)
+                            if zoneDist then
+                                ZoneTiming = 0
+                                ActualZone = v
+                                if not PosSended then
+                                    PosSended = true
+                                    TriggerServerEvent("Zones:setInZone", v)
+                                end
+                                if not currentInMenu then
+                                    CreateThread(function()
+                                        cPlayer:helpNotify(v.inputText)
+                                        v.methode()
+                                    end)
+                                end
+                            else
+                                if ActualZone then 
+                                    local zoneDist2 = cPlayer:isNear(vector3(ActualZone.pos.x, ActualZone.pos.y, ActualZone.pos.z), (ActualZone.showDistMarker))
+                                    if not zoneDist2 then
+                                        ZoneTiming = 500
+                                        PosSended = false
+                                        TriggerServerEvent("Zones:setOutOfZone")
+                                        ActualZone = nil
+                                    end
+                                end
+                            end
+                        end
+                    else
                         if v.blip and not zoneState[v.name].blip then
                             local blip = Blips.create({label = v.blip.label, pos = v.blip.pos, scale = v.blip.scale, colour = v.blip.colour, sprite = v.blip.sprite})
                             zoneState[v.name].blip = true
                         end
-    
+
                         if v.ped then
                             local pedDist = cPlayer:isNear(vector3(v.ped.pos.x, v.ped.pos.y, v.ped.pos.z), v.showDistPed)
                             if pedDist and not zoneState[v.name].ped then
@@ -60,7 +117,7 @@ CreateThread(function()
                                 zoneState[v.name].ped = false
                             end
                         end
-    
+
                         if v.marker then
                             local markerDist = cPlayer:isNear(vector3(v.pos.x, v.pos.y, v.pos.z), v.showDistMarker)
                             if markerDist then
@@ -97,61 +154,6 @@ CreateThread(function()
                                     TriggerServerEvent("Zones:setOutOfZone")
                                     ActualZone = nil
                                 end
-                            end
-                        end
-                    end
-                else
-                    if v.blip and not zoneState[v.name].blip then
-                        local blip = Blips.create({label = v.blip.label, pos = v.blip.pos, scale = v.blip.scale, colour = v.blip.colour, sprite = v.blip.sprite})
-                        zoneState[v.name].blip = true
-                    end
-
-                    if v.ped then
-                        local pedDist = cPlayer:isNear(vector3(v.ped.pos.x, v.ped.pos.y, v.ped.pos.z), v.showDistPed)
-                        if pedDist and not zoneState[v.name].ped then
-                            v:showPed()
-                            zoneState[v.name].ped = true
-                        elseif not pedDist and zoneState[v.name].ped then
-                            v:deletePed()
-                            zoneState[v.name].ped = false
-                        end
-                    end
-
-                    if v.marker then
-                        local markerDist = cPlayer:isNear(vector3(v.pos.x, v.pos.y, v.pos.z), v.showDistMarker)
-                        if markerDist then
-                            ZoneTiming = 0
-                            ActualZone = v
-                            if not PosSended then
-                                PosSended = true
-                                TriggerServerEvent("Zones:setInZone", v)
-                            end
-                            v.marker:showMarker()
-                        end
-                    end
-
-                    local zoneDist = cPlayer:isNear(vector3(v.pos.x, v.pos.y, v.pos.z), v.showDistZone)
-                    if zoneDist then
-                        ZoneTiming = 0
-                        ActualZone = v
-                        if not PosSended then
-                            PosSended = true
-                            TriggerServerEvent("Zones:setInZone", v)
-                        end
-                        if not currentInMenu then
-                            CreateThread(function()
-                                cPlayer:helpNotify(v.inputText)
-                                v.methode()
-                            end)
-                        end
-                    else
-                        if ActualZone then 
-                            local zoneDist2 = cPlayer:isNear(vector3(ActualZone.pos.x, ActualZone.pos.y, ActualZone.pos.z), (ActualZone.showDistMarker))
-                            if not zoneDist2 then
-                                ZoneTiming = 500
-                                PosSended = false
-                                TriggerServerEvent("Zones:setOutOfZone")
-                                ActualZone = nil
                             end
                         end
                     end

@@ -9,9 +9,12 @@ local ChestData = {
     name = "",
     label = "",
     owner = "",
-    code = "",
-    pos = "",
+    type = "Joueur",
+    pos = nil,
 }
+
+local tbl = {"Joueur", "Job"}
+local tblIndex = 1
 
 local main = RageUI.CreateMenu(title, desc)
 main.Closed = function()
@@ -48,24 +51,33 @@ function openChestCreator()
                         end
                     end
                 })
-                RageUI.Button("Propriétaire du coffre", nil, {RightLabel = "~g~"..ChestData.owner}, true, {
-                    onSelected = function()
-                        local owner = string.lower(Key.input(25, "'Nom du job' ou 'Id de la personne'"))
-                        if owner ~= nil then
-                            ChestData.owner = owner
-                        else
-                            cPlayer:notify("error", "Champ invalide")
-                        end
+
+                RageUI.List('Type de propriétaire', tbl, tblIndex, "Le propriétaire du coffre est un joueur ou un job", {}, true, {
+                    onListChange = function(Index, Item)
+                        tblIndex = Index
+                        ChestData.type = tbl[tblIndex]
                     end
                 })
 
-                RageUI.Button("Code du coffre", "Il n'est possible de définir un code que si le propriétaire est un joueur et non un job", {RightLabel = "~g~"..ChestData.code}, ChestData.owner == "moi", {
+                RageUI.Button("Propriétaire du coffre", nil, {RightLabel = "~g~"..ChestData.owner}, true, {
                     onSelected = function()
-                        local code = Key.input(5, "Code du coffre:")
-                        if code ~= nil then
-                            ChestData.code = code
+                        if tblIndex == 1 then
+                            local owner = Key.input(5, "Id du joueur:")
+
+                            if owner ~= nil and tonumber(owner) > 0 then
+                                ChestData.owner = tonumber(owner)
+                            else
+                                cPlayer:notify("error", "Champ invalide")
+                            end
+
                         else
-                            cPlayer:notify("error", "Champ invalide")
+                            local owner = Key.input(25, "Nom du job:")
+
+                            if owner ~= nil then
+                                ChestData.owner = string.lower(owner)
+                            else
+                                cPlayer:notify("error", "Champ invalide")
+                            end
                         end
                     end
                 })
@@ -79,13 +91,13 @@ function openChestCreator()
                     end,
                 })
                 
-                if ChestData.pos ~= "" then
+                if ChestData.pos ~= nil then
                     RageUI.Checkbox('Voir la position', nil, check, {}, {
                         onChecked = function()
                             check = true
                             CreateThread(function()
                                 while check do
-                                    DrawMarker(1, ChestData.pos.x, ChestData.pos.y, ChestData.pos.z-0.8, 0.0, 0.0, 0.0, 0, 0.0, 0.0, 2.0, 2.0, 2.0, 0, 255, 0, 100, false, true, 2, false, false, false, false)
+                                    DrawMarker(1, ChestData.pos.x, ChestData.pos.y, ChestData.pos.z-0.95, 0.0, 0.0, 0.0, 0, 0.0, 0.0, 2.0, 2.0, 2.0, 0, 255, 0, 100, false, true, 2, false, false, false, false)
                                     Wait(0)
                                 end
                             end)
@@ -98,14 +110,20 @@ function openChestCreator()
                 end
                 RageUI.Button("Remettre à zéro", nil, {RightLabel = "→", Color = {HightLightColor = {255, 0, 0, 150}}}, true, {
                     onSelected = function()
-                        ChestData = {name = "", label = "", owner = "", code = "", pos = ""}
+                        ChestData = {name = "", label = "", owner = "", pos = ""}
                         check = false
                     end
                 })
 
                 RageUI.Button("Valider", nil, {RightLabel = "→", Color = {HightLightColor = {0, 255, 0, 150}}}, true, {
                     onSelected = function()
-                        if ChestData.name ~= "" and ChestData.label ~= "" and ChestData.owner ~= "" and ChestData.code ~= 0 and ChestData.pos ~= "" then
+                        if ChestData.name ~= "" and ChestData.label ~= "" and ChestData.owner ~= "" and ChestData.pos ~= "" then
+                            if ChestData.type == "Joueur" then 
+                                ChestData.type = "player"
+                            else
+                                ChestData.type = "job"
+                            end
+
                             TriggerServerEvent("Chest:createChest", ChestData)
                             Wait(100)
                             RageUI.CloseAll()

@@ -7,42 +7,49 @@ CreateThread(function()
     }, function(result)
         for _,v in pairs(result) do
             if not Chests[v.name] then
-                Chest.add(v)
+                Chest.add(v, false)
             end
         end
     end)
 end)
 
-function Chest.create(data)
-    local posEnc = json.encode(data.pos)
-    MySQL.Async.execute('INSERT INTO chests (name, label, owner, code, pos) VALUES (@name, @label, @owner, @code, @pos)', {
+function Chest.create(data, byCrea)
+    MySQL.Async.execute('INSERT INTO chests (name, label, owner, type, pos) VALUES (@name, @label, @owner, @type, @pos)', {
         ['@name'] = data.name,
         ['@label'] = data.label,
-        ['@owner'] = data.owner,
-        ['@code'] = data.code,
-        ['@pos'] = posEnc,
+        ['@owner'] = json.encode(data.owner),
+        ['@type'] = data.type,
+        ['@pos'] = json.encode(data.pos),
     }, function()
-        Chest.add(data)
-        Trace("Le coffre "..data.label.."^0 a bien été sauvegardé")
+        Chest.add(data, byCrea)
+        Trace("Le coffre ^1"..data.label.."^0 a bien été sauvegardé")
     end)
 end
 
-function Chest.add(data)
+function Chest.add(data, byCrea)
     local self = {}
     setmetatable(self, Chest)
 
     self.name = data.name
     self.label = data.label
-    self.owner = data.owner
-    self.pos = json.decode(data.pos)
+    self.type = data.type
+
+    self.owner = {}
+    if byCrea then
+        self.owner = data.owner
+    else
+        self.owner = json.decode(data.owner)
+    end
+
+    self.pos = nil
+    if byCrea then
+        self.pos = data.pos
+    else
+        self.pos = json.decode(data.pos)
+    end
 
     self.weight = 0
     self.maxWeight = shConfig.chests_maxWeight
-
-    self.code = nil
-    if data.code ~= 0 then
-        self.code = data.code
-    end
 
     self.inventory = {}
 	if data.inventory then
@@ -55,7 +62,7 @@ function Chest.add(data)
             if item then
                 foundItems[name] = count
             else
-                Trace(("Item ^1invalide^0 (^4%s^0) détecté dans le coffre: %s - %s"):format(name, self.name, self.owner))
+                Trace(("Item ^1invalide^0 (^4%s^0) détecté dans le coffre: %s"):format(name, self.name))
             end
         end
 
@@ -69,6 +76,11 @@ function Chest.add(data)
 
     Chests[self.name] = self
     Trace("Le coffre ^1"..self.label.."^0 a bien été initialisé")
+    
+    if byCrea then
+        Wait(500)
+        TriggerClientEvent("Chest:registerNewChestZoneForCreator", -1, Chests[self.name])
+    end
 end
 
 function GetChest(name)
@@ -136,16 +148,16 @@ function Chest:getInventory(minimal)
     end
 end
 
+function Chest:giveAccess(targetId)
+
+end
+
 function Chest:save()
-    local owner = self.owner
-    if type(self.owner) == "table" then
-        owner = json.encode(self.owner)
-    end
-    MySQL.Async.execute('UPDATE chests SET label = @label, owner = @owner, code = @code, inventory = @inventory, pos = @pos WHERE name = @name', {
+    MySQL.Async.execute('UPDATE chests SET label = @label, owner = @owner, type = @type, inventory = @inventory, pos = @pos WHERE name = @name', {
         ['@name'] = self.name,
         ['@label'] = self.label,
-        ['@owner'] = self.owner,
-        ['@code'] = self.code,
+        ['@owner'] = json.encode(data.owner),
+        ['@type'] = self.type,
         ['@inventory'] = json.encode(self:getInventory(true)),
         ['@pos'] = json.encode(self.pos),
     })

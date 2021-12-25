@@ -21,3 +21,21 @@ AddEventHandler("Chest:registerChestZoneForServer", function(chestList)
         end
     end)
 end)
+
+RegisterNetEvent("Chest:registerNewChestZoneForCreator")
+AddEventHandler("Chest:registerNewChestZoneForCreator", function(chest)
+    ChestZones[chest.name] = Zones.create({
+        name = chest.name,
+        pos = chest.pos,
+        canSee = chest.owner,
+        marker = Markers.create({type = 1, pos = chest.pos, width = 1.0, height = 1.0, colour = {r = 0, g = 245, b = 245, a = 185}, blowUp = false, faceCam = true, inversed = false}),
+        methode = function()
+            Key.onPress("e", function()
+                TriggerEvent("Chest:openChest", chest)
+            end)
+        end,
+        showDistZone = 1.5,
+        showDistMarker = 20.0,
+        inputText = "Appuyer sur ~INPUT_CONTEXT~ pour ouvrir le ~b~coffre",
+    })
+end)

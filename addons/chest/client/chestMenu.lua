@@ -11,6 +11,7 @@ main.Closed = function()
 end
 local deposit = RageUI.CreateSubMenu(main, "Déposer objet", desc)
 local take = RageUI.CreateSubMenu(main, "Retirer objet", desc)
+local manage = RageUI.CreateSubMenu(main, "Gérer", desc)
 RegisterNetEvent("Chest:refreshInventory")
 
 local crtChest = {}
@@ -36,8 +37,32 @@ function openChest(chest)
                 RageUI.Separator(("Coffre:~b~ %s"):format(crtChest.label))
                 RageUI.Separator(("Poids du coffre:~b~ %skg"):format(crtChest.weight))
 
+                if chest.type == "player" then
+                    RageUI.Button('Gérer le coffre', nil, {RightLabel = "→"}, true, {}, manage)
+                end
+
                 RageUI.Button('Déposer objet', nil, {RightLabel = "→"}, true, {}, deposit)
                 RageUI.Button('Retirer objet', nil, {RightLabel = "→"}, true, {}, take)
+            end)
+
+            RageUI.IsVisible(manage, function()
+                RageUI.Button("Changer le label du coffre:", nil, {RightLabel = "[~r~"..crtChest.label.."~s~]"}, true, {
+                    onSelected = function()
+                        
+                    end
+                })
+
+                RageUI.Button("Donner l'accès à un joueur", nil, {}, true, {
+                    onSelected = function()
+                        local owner = Key.input(5, "Id du joueur:")
+
+                        if owner ~= nil and tonumber(owner) > 0 then
+                            TriggerServerEvent("Chest:giveAccess", tonumber(owner), chest.name)
+                        else
+                            cPlayer:notify("error", "Champ invalide")
+                        end
+                    end
+                })
             end)
 
             RageUI.IsVisible(deposit, function()
