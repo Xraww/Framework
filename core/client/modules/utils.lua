@@ -60,3 +60,30 @@ function SpawnProp(model, coords)
 
 	return entity
 end
+
+RegisterNetEvent("GM:teleportToMarker")
+AddEventHandler("GM:teleportToMarker", function()
+    local WaypointHandle = GetFirstBlipInfoId(8)
+
+    if DoesBlipExist(WaypointHandle) then
+        local waypointCoords = GetBlipInfoIdCoord(WaypointHandle)
+
+        for height = 1, 1000 do
+            SetPedCoordsKeepVehicle(PlayerPedId(), waypointCoords["x"], waypointCoords["y"], height + 0.0)
+
+            local foundGround, zPos = GetGroundZFor_3dCoord(waypointCoords["x"], waypointCoords["y"], height + 0.0)
+
+            if foundGround then
+                SetPedCoordsKeepVehicle(PlayerPedId(), waypointCoords["x"], waypointCoords["y"], height + 0.0)
+
+                break
+            end
+
+            Citizen.Wait(5)
+        end
+
+        cPlayer:notify("success", "Vous avez été téléporté à votre marker")
+    else
+        cPlayer:notify("error", "Vous n'avez pas placé de marker")
+    end
+end)

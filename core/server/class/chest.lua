@@ -60,7 +60,7 @@ function Chest.add(data)
         end
 
         for name, item in pairs(foundItems) do
-            local count = foundItems[name].count
+            local count = foundItems[name]
 
             self.inventory[name] = {name = name, label = Items[name].label, count = count}
             self.weight = self.weight + (Items[name].weight * count)
@@ -69,8 +69,6 @@ function Chest.add(data)
 
     Chests[self.name] = self
     Trace("Le coffre ^1"..self.label.."^0 a bien été initialisé")
-    Wait(500)
-    TriggerClientEvent("Chest:registerChestZoneForServer", -1, Chests)
 end
 
 function GetChest(name)
@@ -121,3 +119,44 @@ function Chest:removeItem(item, count)
         return false
     end
 end
+
+function Chest:getInventory(minimal)
+    if minimal then
+        local minimalInventory = {}
+
+        for k,v in pairs(self.inventory) do
+            if v.count > 0 then
+                minimalInventory[v.name] = v.count
+            end
+        end
+        
+        return minimalInventory
+    else
+        return self.inventory
+    end
+end
+
+function Chest:save()
+    local owner = self.owner
+    if type(self.owner) == "table" then
+        owner = json.encode(self.owner)
+    end
+    MySQL.Async.execute('UPDATE chests SET label = @label, owner = @owner, code = @code, inventory = @inventory, pos = @pos WHERE name = @name', {
+        ['@name'] = self.name,
+        ['@label'] = self.label,
+        ['@owner'] = self.owner,
+        ['@code'] = self.code,
+        ['@inventory'] = json.encode(self:getInventory(true)),
+        ['@pos'] = json.encode(self.pos),
+    })
+    Trace("Sauvegarde en cours du coffre: ^4"..self.label)
+end
+
+CreateThread(function()
+    while true do
+        for k,v in pairs(Chests) do
+            v:save()
+        end
+        Wait(sConfig.chestSaving * 1000 * 60)
+    end
+end)

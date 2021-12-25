@@ -37,7 +37,9 @@ AddEventHandler("Chest:addItem", function(data, item, count)
 
     if zChest:canStockItem(item, count) then
         if zChest:addItem(item, count) then
-            myPlayer:notify("success", ("Vous avez déposé x%s %s dans le ~b~coffre"):format(count, Item[item].label))
+            myPlayer:removeInventory(item, count)
+            myPlayer:notify("success", ("Vous avez déposé x%s %s dans le ~b~coffre"):format(count, Items[item].label))
+            myPlayer:triggerClient("Chest:refreshInventory", zChest.inventory, zChest.weight)
         else
             myPlayer:notify("error", "Cet item n'existe pas et ne peut donc pas être ajouté dans le ~b~coffre")
         end
@@ -51,19 +53,11 @@ AddEventHandler("Chest:removeItem", function(data, item, count)
     local myPlayer = GetPlayer(source)
     local zChest = GetChest(data.name)
 
-    if zChest:removeItem(item, count) then
-        myPlayer:notify("success", ("Vous avez retiré x%s %s du ~b~coffre"):format(count, Item[item].label))
+    if zChest:removeItem(item, count) and myPlayer:canCarryItem(item, count) then
+        myPlayer:addInventory(item, count)
+        myPlayer:notify("success", ("Vous avez retiré x%s %s du ~b~coffre"):format(count, Items[item].label))
+        myPlayer:triggerClient("Chest:refreshInventory", zChest.inventory, zChest.weight)
     else
         myPlayer:notify("error", "Cet item n'existe pas et ne peut donc pas être stocké dans le ~b~coffre")
     end
 end)
-
-RegisterNetEvent("Chest:getInventory")
-AddEventHandler("Chest:getInventory", function(data)
-    local myPlayer = GetPlayer(source)
-    local zChest = GetChest(data.name)
-
-    myPlayer:triggerClient("Chest:cbChestInventory")
-end)
-
--- Loop save chest (minimal)

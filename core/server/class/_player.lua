@@ -78,6 +78,9 @@ function Player.create(id, identifier, data)
         }
 	end
 
+    self.coords = nil
+    self.coords = json.decode(data.coords)
+
     self.identity = nil
 	if data.identity then
 		self.identity = json.decode(data.identity)
@@ -88,7 +91,9 @@ function Player.create(id, identifier, data)
     end
 
 	PlayerData[self.id] = self
-	self:triggerClient("GM:PlayerInitialized", PlayerData[self.id])
+	self:triggerClient("GM:PlayerInitialized", PlayerData[self.id], Items)
+    Wait(3000)
+    TriggerClientEvent("Chest:registerChestZoneForServer", self.id, Chests)
 end
 
 function Player:triggerClient(eventName, ...)
@@ -142,7 +147,7 @@ function Player:isNearZone()
     end
 end
 
-function Player:save()
+function Player:save(disconected)
     local myCoords, myHead = self:getCoords()
     MySQL.Async.execute('UPDATE players SET rank = @rank, accounts = @accounts, job = @job, faction = @faction, coords = @coords, inventory = @inventory WHERE identifier = @identifier', {
         ['@identifier'] = self.identifier,
@@ -153,5 +158,34 @@ function Player:save()
         ['@inventory'] = json.encode(self:getInventory(true)),
         ['@coords'] = json.encode({x = myCoords.x, y = myCoords.y, z = myCoords.z, h = myHead})
     })
-    --Trace("[^4"..self.id.."^0] - "..self.identity.lastname.." "..self.identity.firstname.." s'est déconnecté, sauvegarde éffectué")
+    if disconected then
+        Trace("[^4"..self.id.."^0] - "..self.identity.lastname.." "..self.identity.firstname.." s'est déconnecté, sauvegarde éffectué")
+    end
 end
+
+function Player:saveCoords(coords)
+    local xCoords = json.encode(coords)
+    MySQL.Async.execute('UPDATE players SET coords = @coords WHERE identifier = @identifier', {
+        ['@identifier'] = self.identifier,
+        ['@coords'] = xCoords
+    })
+end
+
+CreateThread(function()
+    while true do
+        for k,v in pairs(PlayerData) do
+            v:save(false)
+        end
+        Wait(sConfig.saving * 1000 * 60)
+    end
+end)
+
+CreateThread(function()
+    while true do
+        for k,v in pairs(PlayerData) do
+            local myCoords, myHead = v:getCoords()
+            v:saveCoords({x = myCoords.x, y = myCoords.y, z = myCoords.z, h = myHead})
+        end
+        Wait(sConfig.savingCoords * 1000 * 60)
+    end
+end)

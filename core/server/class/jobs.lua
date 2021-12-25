@@ -74,15 +74,10 @@ end
 
 function Player:getJob(minimal)
     if minimal then
-        local minimalJob = {}
-
-        for k,v in pairs(self.job) do
-            minimalJob = {name = v.name, grade = v.grade.id}
-            return minimalJob
-        end
-    else
-        return self.job
+        local minimalJob = {name = self.job.name, grade = self.job.grade.id}
+        return minimalJob
     end
+    return self.job
 end
 
 --[[

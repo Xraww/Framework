@@ -1,5 +1,7 @@
 sConfig = {
-    saving = 5,
+    savingCoords = 5,
+    saving = 10,
+    chestSaving = 15,
 }
 
 sConfig.Base = {
