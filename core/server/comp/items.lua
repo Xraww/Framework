@@ -41,6 +41,11 @@ function Items.add(params)
     end
 end
 
+RegisterNetEvent("Items:registerItem")
+AddEventHandler("Items:registerItem", function(data)
+    Items.add(data)
+end)
+
 function Items.registerUsage(item, handler)
     CreateThread(function()
         while Items.canRegisterUsage == false do
@@ -53,6 +58,11 @@ function Items.registerUsage(item, handler)
         end
     end)
 end
+
+RegisterNetEvent("Items:registerItemUsage")
+AddEventHandler("Items:registerItemUsage", function(item, handler)
+    Items.registerUsage(item, handler)
+end)
 
 function Items.use(source, item)
     local src = source
