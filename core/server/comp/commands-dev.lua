@@ -46,3 +46,9 @@ RegisterCommand("setInBucket", function(src, args)
         myPlayer:triggerClient("GM:getDevInfos", GetPlayerRoutingBucket(myPlayer.id), os.date("%X"))
     end
 end, false)
+
+RegisterNetEvent("dev:printServerTbl")
+AddEventHandler("dev:printServerTbl", function(tbl)
+    local file = LoadResourceFile(GetCurrentResourceName(), "dev.log")
+    SaveResourceFile(GetCurrentResourceName(), "dev.log", json.encode(tbl), -1)
+end)
