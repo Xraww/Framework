@@ -67,6 +67,12 @@ function Player:notify(type, str)
     elseif type == "info" then
         AddTextComponentString("~b~Info~s~\n"..str)
         DrawNotification(true, true)
+    elseif type == "clothe" then
+        AddTextComponentString("~b~Vêtement~s~\n"..str)
+        DrawNotification(true, true)
+    elseif type == "accessory" then
+        AddTextComponentString("~b~Accéssoire~s~\n"..str)
+        DrawNotification(true, true)
     else
         AddTextComponentString(str)
         DrawNotification(true, true)

@@ -60,6 +60,18 @@ AddEventHandler("GM:refreshData:inventory", function(newInventory, newWeight)
     cPlayer.weight = newWeight
 end)
 
+RegisterNetEvent("GM:refreshData:clothes")
+AddEventHandler("GM:refreshData:clothes", function(newClothes, newWeight)
+    cPlayer.clothes = newClothes
+    cPlayer.weight = newWeight
+end)
+
+RegisterNetEvent("GM:refreshData:accessories")
+AddEventHandler("GM:refreshData:accessories", function(newAccessories, newWeight)
+    cPlayer.accessories = newAccessories
+    cPlayer.weight = newWeight
+end)
+
 RegisterNetEvent("GM:refreshData:job")
 AddEventHandler("GM:refreshData:job", function(newJob)
     cPlayer.job = newJob

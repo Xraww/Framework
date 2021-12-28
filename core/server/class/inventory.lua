@@ -57,7 +57,7 @@ function Player:addInventory(item, count)
                 self:triggerClient("GM:refreshData:inventory", self.inventory, self.weight)
                 return true
             else
-                self:notify("item", "Vous avez trop de ~r~"..Items[item].label.."~s~ sur vous, ou vous êtes trop lourd")
+                self:notify("item", "Vous êtes trop lourd")
                 return false
             end
         else
@@ -73,7 +73,7 @@ function Player:addInventory(item, count)
                 self:triggerClient("GM:refreshData:inventory", self.inventory, self.weight)
                 return true
             else
-                self:notify("item", "Vous avez trop de ~r~"..Items[item].label.."~s~ sur vous, ou vous êtes trop lourd")
+                self:notify("item", "Vous êtes trop lourd")
                 return false
             end
         end

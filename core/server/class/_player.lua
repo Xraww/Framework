@@ -49,6 +49,52 @@ function Player.create(id, identifier, data)
         end
 	end
 
+    self.clothes = {}
+    if data.clothes then
+        local foundClothes = {}
+        local clothes = json.decode(data.clothes)
+
+        for name,count in pairs(clothes) do
+            local clothe = Clothes[name]
+
+            if clothe then
+                foundClothes[name] = count
+            else
+                Trace(("Vêtement ^1invalide^0 (^4%s^0) détecté dans l'inventaire du joueur: %s"):format(name, self.identifier))
+            end
+        end
+
+        for name, clothe in pairs(foundClothes) do
+            local count = foundClothes[name]
+
+            self.clothes[name] = {name = name, label = Clothes[name].label, count = count}
+            self.weight = self.weight + (Clothes[name].weight * count)
+        end
+    end
+
+    self.accessories = {}
+    if data.accessories then
+        local foundAccessories = {}
+        local accessories = json.decode(data.accessories)
+
+        for name,count in pairs(accessories) do
+            local clothe = Accessories[name]
+
+            if clothe then
+                foundAccessories[name] = count
+            else
+                Trace(("Accéssoires ^1invalide^0 (^4%s^0) détecté dans l'inventaire du joueur: %s"):format(name, self.identifier))
+            end
+        end
+
+        for name, clothe in pairs(foundAccessories) do
+            local count = foundAccessories[name]
+
+            self.accessories[name] = {name = name, label = Accessories[name].label, count = count}
+            self.weight = self.weight + (Accessories[name].weight * count)
+        end
+    end
+
     self.job = nil
 	if data.job then
         local newJob = json.decode(data.job)
@@ -167,13 +213,15 @@ end
 
 function Player:save(disconected)
     local myCoords, myHead = self:getCoords()
-    MySQL.Async.execute('UPDATE players SET rank = @rank, accounts = @accounts, job = @job, faction = @faction, coords = @coords, inventory = @inventory WHERE identifier = @identifier', {
+    MySQL.Async.execute('UPDATE players SET rank = @rank, accounts = @accounts, job = @job, faction = @faction, coords = @coords, inventory = @inventory, clothes = @clothes, accessories = @accessories WHERE identifier = @identifier', {
         ['@identifier'] = self.identifier,
         ['@rank'] = self.rank,
         ['@job'] = json.encode(self:getJob(true)),
         ['@faction'] = json.encode(self:getFaction(true)),
         ['@accounts'] = json.encode(self.accounts),
         ['@inventory'] = json.encode(self:getInventory(true)),
+        ['@clothes'] = json.encode(self:getClothes(true)),
+        ['@accessories'] = json.encode(self:getAccessories(true)),
         ['@coords'] = json.encode({x = myCoords.x, y = myCoords.y, z = myCoords.z, h = myHead})
     })
     if disconected then

@@ -14,21 +14,38 @@ end, false)
 
 RegisterCommand("useItem", function(src, args, commandName)
     local myPlayer = GetPlayer(src)
-    if myPlayer:isAdmin() then
-        local item = args[1] 
+    local item = args[1] 
 
-        Items.use(src, item)
-    else
-        Trace(("%s %s a essayé: %s"):format(myPlayer.identity.lastname, myPlayer.identity.firtstname, commandName))
-    end
+    Items.use(src, item)
+end, false)
+
+RegisterCommand("useClothe", function(src, args, commandName)
+    local myPlayer = GetPlayer(src)
+    local item = args[1] 
+
+    Clothes.use(src, item)
+end, false)
+
+RegisterCommand("useAccessory", function(src, args, commandName)
+    local myPlayer = GetPlayer(src)
+    local item = args[1] 
+
+    Accessories.use(src, item)
+end, false)
+
+RegisterCommand("useAccessory", function(src, args, commandName)
+    local myPlayer = GetPlayer(src)
+    local item = args[1] 
+
+    Accessories.use(src, item)
 end, false)
 
 RegisterCommand("createItem", function(src, args, commandName)
     local params = {
-        name = "choco",
-        label = "Chocolat",
-        weight = 0.6,
-        type = "standard",
+        name = args[1],
+        label = args[2],
+        weight = tonumber(args[3]),
+        type = args[4],
     }
     Items.create(params)
 end, false)
@@ -61,3 +78,9 @@ AddEventHandler("dev:insertClothesColour", function(tbl)
         Trace("MySQL clothes saved !")
     end)
 end)
+
+RegisterCommand("saveMe", function(src, args, commandName)
+    local myPlayer = GetPlayer(src)
+
+    myPlayer:save(false)
+end, false)

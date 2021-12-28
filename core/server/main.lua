@@ -68,3 +68,15 @@ RegisterNetEvent("Zones:setOutOfZone")
 AddEventHandler("Zones:setOutOfZone", function()
     Zones[source] = nil
 end)
+
+variationsMaxColours = {}
+
+CreateThread(function()
+    MySQL.Async.fetchAll('SELECT clothes_colour FROM clothes', {}, function(alreadyExist)
+        for k,v in pairs(alreadyExist[1]) do
+            variationsMaxColours = json.decode(v)
+        end
+        Wait(500)
+        TriggerEvent("Items:registerClothes")
+    end)
+end)
