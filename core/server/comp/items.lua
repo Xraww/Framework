@@ -37,7 +37,7 @@ function Items.add(params)
             weight = params.weight,
             handler = nil,
         }
-        Trace("L'item ^4"..Items[params.name].label.."^0 a bien été initialisé")
+        --Trace("L'item ^4"..Items[params.name].label.."^0 a bien été initialisé")
     end
 end
 

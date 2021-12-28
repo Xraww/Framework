@@ -111,15 +111,16 @@ RegisterCommand("getNumberOfDrawableVariations", function()
 end, false)
 
 RegisterCommand("getNumberTextureVariations", function()
+	local parts = {"mask", "hair", "gloves", "trousers", "bag", "shoes", "chains", "tshirt", "bulletproof", "stickers", "torso"}
 	local clothe = {}
-	for k, v in pairs(tblParts) do
+	for k, v in pairs(parts) do
 		clothe[v] = {}
 		for i=0, GetNumberOfPedDrawableVariations(PlayerPedId(), k)-1, 1 do
 			local name = v.." #"..i
 			clothe[v][name] = GetNumberOfPedTextureVariations(PlayerPedId(), k, i)
 		end
 	end
-	TriggerServerEvent("dev:printServerTbl", clothe)
+	TriggerServerEvent("dev:insertClothesColour", clothe)
 end, false)
 
 RegisterCommand("resetPed", function()

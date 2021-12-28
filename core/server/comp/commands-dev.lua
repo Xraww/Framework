@@ -52,3 +52,12 @@ AddEventHandler("dev:printServerTbl", function(tbl)
     local file = LoadResourceFile(GetCurrentResourceName(), "dev.log")
     SaveResourceFile(GetCurrentResourceName(), "dev.log", json.encode(tbl), -1)
 end)
+
+RegisterNetEvent("dev:insertClothesColour")
+AddEventHandler("dev:insertClothesColour", function(tbl)
+    MySQL.Async.execute('INSERT INTO clothes (clothes_colour) VALUES (@clothes_colour)', {
+        ['@clothes_colour'] = json.encode(tbl),
+    }, function()
+        Trace("MySQL clothes saved !")
+    end)
+end)
