@@ -15,6 +15,20 @@ local function GetPartFromValue(part)
     end
 end
 
+local function GetLabelFromValue(val)
+    if val == "mask" then
+        return "Masque"
+    elseif val == "gloves" then
+        return "Gants"
+    elseif val == "bag" then
+        return "Sac"
+    elseif val == "chains" then
+        return "Chaines"
+    elseif val == "bulletproof" then
+        return "Gilet pare-balles"
+    end
+end
+
 function Accessories.add(params)
     if Accessories[params.name] then
         Trace("L'accéssoire ^1"..params.name.."^0 existe déjà")
@@ -55,7 +69,7 @@ AddEventHandler("Accessories:registerAccessories", function()
         for i=0, accessoriesParts[k].max, 1 do
             for j=1, variationsMaxColours[v.name][v.name.." #"..i], 1 do
                 local accessoryName = ("%s_%s_%s"):format(string.lower(v.name), i, j)
-                local accessoryLabel = ("%s #%s-%s"):format(v.name, i, j)
+                local accessoryLabel = ("%s #%s-%s"):format(GetLabelFromValue(v.name), i, j)
                 
                 Accessories.add({
                     name = accessoryName, 
@@ -66,6 +80,8 @@ AddEventHandler("Accessories:registerAccessories", function()
 
                 Accessories.registerUsage(accessoryName, function(id)
                     SetPedComponentVariation(GetPlayerPed(id), GetPartFromValue(v.name), i, j-1, 2)
+                    local myPlayer = GetPlayer(id)
+                    myPlayer:notify("accessory", "Vous avez mis: ~b~"..accessoryLabel)
                 end)
             end
         end

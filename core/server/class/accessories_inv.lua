@@ -14,8 +14,14 @@ function Player:getAccessories(minimal)
     end
 end
 
+function Player:canUseAccessory(accessory)
+    if Accessories[accessory].handler then
+        return true
+    end
+end
+
 function Player:useAccessory(accessory)
-    if self:canUseItem(accessory) then
+    if self:canUseAccessory(accessory) then
         Accessories.use(self.id, accessory)
     else
         self:notify("error", "Vous ne pouvez pas utiliser cet accéssoire")

@@ -37,6 +37,7 @@ function Player.create(id, identifier, data)
             if item then
                 foundItems[name] = count
             else
+                foundItems[name] = count
                 Trace(("Item ^1invalide^0 (^4%s^0) détecté dans l'inventaire du joueur: %s"):format(name, self.identifier))
             end
         end
@@ -49,6 +50,7 @@ function Player.create(id, identifier, data)
         end
 	end
 
+    Wait(5000) -- remove (it's for dev test)
     self.clothes = {}
     if data.clothes then
         local foundClothes = {}
@@ -60,6 +62,7 @@ function Player.create(id, identifier, data)
             if clothe then
                 foundClothes[name] = count
             else
+                foundClothes[name] = count
                 Trace(("Vêtement ^1invalide^0 (^4%s^0) détecté dans l'inventaire du joueur: %s"):format(name, self.identifier))
             end
         end
@@ -83,6 +86,7 @@ function Player.create(id, identifier, data)
             if clothe then
                 foundAccessories[name] = count
             else
+                foundAccessories[name] = count
                 Trace(("Accéssoires ^1invalide^0 (^4%s^0) détecté dans l'inventaire du joueur: %s"):format(name, self.identifier))
             end
         end
@@ -136,7 +140,7 @@ function Player.create(id, identifier, data)
     end
 
 	PlayerData[self.id] = self
-	self:triggerClient("GM:PlayerInitialized", PlayerData[self.id], Items)
+	self:triggerClient("GM:PlayerInitialized", PlayerData[self.id], {items = Items, clothes = Clothes, accessories = Accessories})
     self:triggerClient("GM:getDevInfos", GetPlayerRoutingBucket(self.id))
     Wait(3000)
     TriggerClientEvent("Chest:registerChestZoneForServer", self.id, Chests)

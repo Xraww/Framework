@@ -14,8 +14,14 @@ function Player:getClothes(minimal)
     end
 end
 
+function Player:canUseClothe(clothe)
+    if Clothes[clothe].handler then
+        return true
+    end
+end
+
 function Player:useClothe(clothe)
-    if self:canUseItem(clothe) then
+    if self:canUseClothe(clothe) then
         Clothes.use(self.id, clothe)
     else
         self:notify("error", "Vous ne pouvez pas utiliser ce vêtement")

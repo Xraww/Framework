@@ -30,7 +30,7 @@ RegisterCommand("giveitem", function(src, args, commandName)
     end
 end, false)
 
-RegisterCommand("clearinv", function(src, args, commandName)
+RegisterCommand("clearInv", function(src, args, commandName)
     local myPlayer = GetPlayer(src)
     if myPlayer:isAdmin() then
         local id = tonumber(args[1])
@@ -57,6 +57,127 @@ RegisterCommand("saveInventory", function(src, args, commandName)
         Trace(("%s %s a essayé: %s"):format(myPlayer.identity.lastname, myPlayer.identity.firtstname, commandName))
     end
 end, false)
+
+RegisterCommand("giveclothe", function(src, args, commandName)
+    local myPlayer = GetPlayer(src)
+    if myPlayer:isAdmin() then
+        local id = tonumber(args[1])
+        local targetPlayer = GetPlayer(id)
+        local clothe = args[2]
+        local count = tonumber(args[3])
+
+        if #args ~= 3 then 
+            myPlayer:notify("error", "Il manque des arguments à votre commande:\n/giveclothe id clothe count") 
+        else
+            if Clothes[clothe] then
+                if targetPlayer ~= nil and count > 0 then
+                    local canCarry, amount = targetPlayer:canCarryClothe(clothe, count)
+                    if canCarry then
+                        targetPlayer:addClothe(clothe, count)
+                        myPlayer:notify("success", "Vous avez donné ~b~x1 "..Clothes[clothe].label.."~s~ à l'id ~r~"..args[1])
+                    else
+                        myPlayer:notify("error", "Le joueur n'a pas assez de place, ~b~"..amount.."kg~s~ en trop")
+                    end
+                else
+                    myPlayer:notify("error", "Aucun joueur ne possède cet id")
+                end
+            else
+                myPlayer:notify("error", "Ce vêtement n'existe pas")
+            end
+        end
+    else
+        Trace(("%s %s a essayé: %s"):format(myPlayer.identity.lastname, myPlayer.identity.firtstname, commandName))
+    end
+end, false)
+
+RegisterCommand("clearClothes", function(src, args, commandName)
+    local myPlayer = GetPlayer(src)
+    if myPlayer:isAdmin() then
+        local id = tonumber(args[1])
+        local targetPlayer = GetPlayer(id)
+
+        targetPlayer.clothes = {}
+        targetPlayer:saveClothes()
+        myPlayer:notify("success", "Vous avez clear l'inventaire (vêtement) du joueur: ~r~"..args[1])
+    else
+        Trace(("%s %s a essayé: %s"):format(myPlayer.identity.lastname, myPlayer.identity.firtstname, commandName))
+    end
+end, false)
+
+RegisterCommand("saveClothes", function(src, args, commandName)
+    local myPlayer = GetPlayer(src)
+    if myPlayer:isAdmin() then
+        local id = tonumber(args[1])
+        local targetPlayer = GetPlayer(id)
+
+        targetPlayer:saveClothes()
+        myPlayer:notify("success", "Vous avez sauvegardé les vêtements du joueur: ~r~"..args[1])
+        targetPlayer:notify("info", "Vos vêtements ont été sauvegardés")
+    else
+        Trace(("%s %s a essayé: %s"):format(myPlayer.identity.lastname, myPlayer.identity.firtstname, commandName))
+    end
+end, false)
+
+RegisterCommand("giveaccessory", function(src, args, commandName)
+    local myPlayer = GetPlayer(src)
+    if myPlayer:isAdmin() then
+        local id = tonumber(args[1])
+        local targetPlayer = GetPlayer(id)
+        local accessory = args[2]
+        local count = tonumber(args[3])
+
+        if #args ~= 3 then 
+            myPlayer:notify("error", "Il manque des arguments à votre commande:\n/giveaccessory id accessory count") 
+        else
+            if Accessories[accessory] then
+                if targetPlayer ~= nil and count > 0 then
+                    local canCarry, amount = targetPlayer:canCarryAccessory(accessory, count)
+                    if canCarry then
+                        targetPlayer:addAccessory(accessory, count)
+                        myPlayer:notify("success", "Vous avez donné ~b~x1 "..Accessories[accessory].label.."~s~ à l'id ~r~"..args[1])
+                    else
+                        myPlayer:notify("error", "Le joueur n'a pas assez de place, ~b~"..amount.."kg~s~ en trop")
+                    end
+                else
+                    myPlayer:notify("error", "Aucun joueur ne possède cet id")
+                end
+            else
+                myPlayer:notify("error", "Cet accéssoire n'existe pas")
+            end
+        end
+    else
+        Trace(("%s %s a essayé: %s"):format(myPlayer.identity.lastname, myPlayer.identity.firtstname, commandName))
+    end
+end, false)
+
+RegisterCommand("clearAccessories", function(src, args, commandName)
+    local myPlayer = GetPlayer(src)
+    if myPlayer:isAdmin() then
+        local id = tonumber(args[1])
+        local targetPlayer = GetPlayer(id)
+
+        targetPlayer.saveAccessories = {}
+        targetPlayer:saveClothes()
+        myPlayer:notify("success", "Vous avez clear l'inventaire (accéssoire) du joueur: ~r~"..args[1])
+    else
+        Trace(("%s %s a essayé: %s"):format(myPlayer.identity.lastname, myPlayer.identity.firtstname, commandName))
+    end
+end, false)
+
+RegisterCommand("saveAccessories", function(src, args, commandName)
+    local myPlayer = GetPlayer(src)
+    if myPlayer:isAdmin() then
+        local id = tonumber(args[1])
+        local targetPlayer = GetPlayer(id)
+
+        targetPlayer:saveAccessories()
+        myPlayer:notify("success", "Vous avez sauvegardé les accéssoires du joueur: ~r~"..args[1])
+        targetPlayer:notify("info", "Vos accéssoires ont été sauvegardés")
+    else
+        Trace(("%s %s a essayé: %s"):format(myPlayer.identity.lastname, myPlayer.identity.firtstname, commandName))
+    end
+end, false)
+
 
 RegisterCommand("weight", function(src, args)
     local myPlayer = GetPlayer(src)

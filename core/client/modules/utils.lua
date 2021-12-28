@@ -99,7 +99,7 @@ end)
 CreateThread(function()
     while true do 
 		local y, m, d, h, min, s = GetLocalTime()
-		local date = (("%s:%s:%s"):format(h, min, s))
+		local date = (("%s:%s:%s"):format(h+1, min, s))
 
         SetTextColour(255, 255, 255, 255)
 		SetTextFont(4)

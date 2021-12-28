@@ -12,6 +12,20 @@ RegisterCommand("inv", function(src, args)
     print(json.encode(inventory))
 end, false)
 
+RegisterCommand("clothes", function(src, args)
+    local myPlayer = GetPlayer(src)
+    local clothes = myPlayer:getClothes(false)
+
+    print(json.encode(clothes))
+end, false)
+
+RegisterCommand("accessories", function(src, args)
+    local myPlayer = GetPlayer(src)
+    local accessories = myPlayer:getAccessories(false)
+
+    print(json.encode(accessories))
+end, false)
+
 RegisterCommand("useItem", function(src, args, commandName)
     local myPlayer = GetPlayer(src)
     local item = args[1] 
@@ -81,6 +95,5 @@ end)
 
 RegisterCommand("saveMe", function(src, args, commandName)
     local myPlayer = GetPlayer(src)
-
     myPlayer:save(false)
 end, false)

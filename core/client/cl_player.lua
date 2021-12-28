@@ -20,6 +20,16 @@ function Player.create(data)
 		self.inventory = data.inventory
 	end
 
+    self.clothes = nil
+	if data.clothes then
+		self.clothes = data.clothes
+	end
+
+    self.accessories = nil
+	if data.accessories then
+		self.accessories = data.accessories
+	end
+
     self.job = data.job
     self.faction = data.faction
 

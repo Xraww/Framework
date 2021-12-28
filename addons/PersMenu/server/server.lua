@@ -43,3 +43,15 @@ AddEventHandler("PersMenu:itemInfos", function(item)
 
     player:notify("info", ("Item: ~g~%s - %s\n~s~Poid: ~g~%skg\n~s~Utilisable: ~g~%s\n~s~Type: ~g~%s"):format(Items[item].name, Items[item].label, Items[item].weight, haveUsage, Items[item].type))
 end)
+
+RegisterNetEvent("PersMenu:useClothe")
+AddEventHandler("PersMenu:useClothe", function(clothe)
+    local myPlayer = GetPlayer(source)
+    myPlayer:useClothe(clothe)
+end)
+
+RegisterNetEvent("PersMenu:useAccessory")
+AddEventHandler("PersMenu:useAccessory", function(accessory)
+    local myPlayer = GetPlayer(source)
+    myPlayer:useAccessory(accessory)
+end)

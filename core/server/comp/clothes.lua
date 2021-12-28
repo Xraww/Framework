@@ -13,6 +13,18 @@ local function GetPartFromValue(part)
     end
 end
 
+local function GetLabelFromValue(val)
+    if val == "trousers" then
+        return "Pantalon"
+    elseif val == "shoes" then
+        return "Chaussures"
+    elseif val == "tshirt" then
+        return "Tshirt"
+    elseif val == "torso" then
+        return "Torse"
+    end
+end
+
 function Clothes.add(params)
     if Clothes[params.name] then
         Trace("Le vêtement ^1"..params.name.."^0 existe déjà")
@@ -53,7 +65,7 @@ AddEventHandler("Clothes:registerClothes", function()
         for i=0, clothesParts[k].max, 1 do
             for j=1, variationsMaxColours[v.name][v.name.." #"..i], 1 do
                 local clotheName = ("%s_%s_%s"):format(string.lower(v.name), i, j)
-                local clotheLabel = ("%s #%s-%s"):format(v.name, i, j)
+                local clotheLabel = ("%s #%s-%s"):format(GetLabelFromValue(v.name), i, j)
                 
                 Clothes.add({
                     name = clotheName, 
@@ -64,10 +76,12 @@ AddEventHandler("Clothes:registerClothes", function()
 
                 Clothes.registerUsage(clotheName, function(id)
                     SetPedComponentVariation(GetPlayerPed(id), GetPartFromValue(v.name), i, j-1, 2)
+                    local myPlayer = GetPlayer(id)
+                    myPlayer:notify("clothes", "Vous avez mis: ~b~"..clotheLabel)
                 end)
             end
         end
     end
     Trace("Clothes loaded")
-    TriggerEvent("Clothes:registerAccessories")
+    TriggerEvent("Accessories:registerAccessories")
 end)

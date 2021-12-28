@@ -1,6 +1,8 @@
 PlayerLoaded = false
 currentInMenu = false
 cItems = {}
+cClothes = {}
+cAccessories = {}
 
 function setPlayerInMenu()
     if currentInMenu then
@@ -19,8 +21,10 @@ CreateThread(function()
 end)
 
 RegisterNetEvent("GM:PlayerInitialized")
-AddEventHandler("GM:PlayerInitialized", function(data, items)
-    cItems = items
+AddEventHandler("GM:PlayerInitialized", function(data, tbl)
+    cItems = tbl.items
+    cClothes = tbl.clothes
+    cAccessories = tbl.accessories
     cPlayer = Player.create(data)
 
     local model = GetHashKey('mp_m_freemode_01')

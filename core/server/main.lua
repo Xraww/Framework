@@ -77,6 +77,6 @@ CreateThread(function()
             variationsMaxColours = json.decode(v)
         end
         Wait(500)
-        TriggerEvent("Items:registerClothes")
+        TriggerEvent("Clothes:registerClothes")
     end)
 end)
