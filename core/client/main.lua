@@ -10,7 +10,6 @@ function setPlayerInMenu()
     else
         currentInMenu = true
     end
-    print("setPlayerInMenu: called")
 end
 
 CreateThread(function()

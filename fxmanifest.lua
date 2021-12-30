@@ -6,7 +6,8 @@ Author 'Xraww'
 repository 'https://github.com/Xraww/Framework/'
 
 shared_scripts {
-    "config/shared.lua"
+    "config/shared.lua",
+    "addons/**/shared/*.lua",
 }
 
 client_scripts {
