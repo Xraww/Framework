@@ -25,31 +25,33 @@ local PersMenu = {
     crtAccessory = {},
     checked = false,
 
-    clothesList = {"Pantalon", "Chaussures", "Tshirt", "Torse"},
+    clothesList = {"Pantalon", "Chaussures", "Haut"},
     clothesIndex = 1,
     accessoriesList = {"Masque", "Gants", "Sac", "Chaine", "Gilet pare-balles"},
     accessoriesIndex = 1,
 }
 
-local function GetPartFromValue(part)
+local function RemovePart(part)
     if part == "Masque" then
-        return 1, 0, 1
+        SetPedComponentVariation(PlayerPedId(), 1, 0, 0, 2)
     elseif part == "Gants" then
-        return 3, 15, 1
+        SetPedComponentVariation(PlayerPedId(), 3, 15, 0, 2)
     elseif part == "Sac" then
-        return 5, 0, 1
+        SetPedComponentVariation(PlayerPedId(), 5, 0, 0, 2)
     elseif part == "Chaine" then
-        return 7, 0, 1
+        SetPedComponentVariation(PlayerPedId(), 7, 0, 0, 2)
     elseif part == "Gilet pare-balles" then
-        return 9, 0, 1
+        SetPedComponentVariation(PlayerPedId(), 9, 0, 0, 2)
     elseif part == "Pantalon" then
-        return 4, 18, 1
+        SetPedComponentVariation(PlayerPedId(), 4, 18, 0, 2)
     elseif part == "Chaussures" then
-        return 6, 34, 1
+        SetPedComponentVariation(PlayerPedId(), 6, 34, 0, 2)
     elseif part == "Tshirt" then
-        return 8, 15, 1
-    elseif part == "Torse" then
-        return 11, 15, 1
+        SetPedComponentVariation(PlayerPedId(), 8, 15, 0, 2)
+    elseif part == "Haut" then
+        SetPedComponentVariation(PlayerPedId(), 3, 15, 0, 2)
+        SetPedComponentVariation(PlayerPedId(), 8, 15, 0, 2)
+        SetPedComponentVariation(PlayerPedId(), 11, 15, 0, 2)
     end
 end
 
@@ -167,7 +169,7 @@ function openPersonalMenu()
                             cPlayer:notify("error", "Aucune personne proche de vous")
                         end
                     end,
-                    onHovered = function()
+                    onActive = function()
                         DisplayClosetPlayer()
                     end
                 })
@@ -192,16 +194,12 @@ function openPersonalMenu()
                 RageUI.List('Vêtement: ', PersMenu.clothesList, PersMenu.clothesIndex, nil, {}, true, {
                     onListChange = function(Index, Item)
                         PersMenu.clothesIndex = Index
-                        print(PersMenu.clothesIndex)
                     end
                 })
 
                 RageUI.Button("Enlever", nil, {}, true, {
                     onSelected = function()
-                        local part, item, colour = GetPartFromValue(PersMenu.clothesList[PersMenu.clothesIndex])
-                        print(part, item, colour)
-                        print(PersMenu.clothesList[PersMenu.clothesIndex])
-                        SetPedComponentVariation(PlayerPedId(), part, item, colour, 2)
+                        RemovePart(PersMenu.clothesList[PersMenu.clothesIndex])
                     end
                 })
             end)
@@ -215,8 +213,7 @@ function openPersonalMenu()
                 
                 RageUI.Button("Enlever", nil, {}, true, {
                     onSelected = function()
-                        local part, item, colour = GetPartFromValue(PersMenu.clothesList[PersMenu.clothesIndex])
-                        SetPedComponentVariation(PlayerPedId(), part, item, colour, 2)
+                        RemovePart(PersMenu.accessoriesList[PersMenu.accessoriesIndex])
                     end
                 })
             end)
