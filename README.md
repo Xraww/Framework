@@ -1,2 +1,2 @@
 # Framework
-Custom framework for FiveM by Xraww.
+Custom framework for FiveM.
